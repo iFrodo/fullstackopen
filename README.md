@@ -34,6 +34,9 @@ sequenceDiagram
 
     Browser->>User: Displays a refreshed page with a new note
 ```
+
+
+
 ``` mermaid
 sequenceDiagram
     participant User
