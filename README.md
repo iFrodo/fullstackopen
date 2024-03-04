@@ -1,4 +1,4 @@
-
+``` mermaid
 
 sequenceDiagram
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
@@ -25,3 +25,4 @@ sequenceDiagram
 
     Note right of browser: Браузер выполняет обратный вызов (callback) функции, которая отображает заметки
 
+```
