@@ -5,7 +5,7 @@ A-->C;
 B-->D;
 C-->D;
   ```
-```mermaid
+
 graph TD;
     browser-->server: GET https://studies.cs.helsinki.fi/exampleapp/notes
     activate server
@@ -30,4 +30,4 @@ graph TD;
     deactivate server
 
     Note right of browser: The browser executes the callback function that renders the notes
-    ```
+  
