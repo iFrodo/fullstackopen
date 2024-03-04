@@ -1,28 +1,21 @@
 ``` mermaid
-
 sequenceDiagram
-    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
-    activate server
-    server-->>browser: HTML document
-    deactivate server
+    participant User
+    participant Browser
+    participant Server
 
-    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
-    activate server
-    server-->>browser: the css file
-    deactivate server
+    User->>Browser: Открывает страницу
+    Browser->>User: Отображает страницу
 
-    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.js
-    activate server
-    server-->>browser: the JavaScript file
-    deactivate server
+    User->>Browser: Вводит текст в поле
+    Browser->>User: Отображает введенный текст
 
-    Note right of browser: Браузер начинает выполнение JavaScript-кода, который получает JSON с сервера
+    User->>Browser: Нажимает кнопку "Сохранить"
+    Browser->>Server: POST-запрос на /exampleapp/notes с данными
+    Server->>Browser: Возвращает ответ (например, "Заметка сохранена")
 
-    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/data.json
-    activate server
-    server-->>browser: [{ "content": "HTML is easy", "date": "2023-1-1" }, ... ]
-    deactivate server
+    Note right of Browser: Браузер обновляет страницу
+    Browser->>User: Отображает обновленную страницу с новой заметкой
 
-    Note right of browser: Браузер выполняет обратный вызов (callback) функции, которая отображает заметки
 
 ```
