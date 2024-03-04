@@ -1,9 +1,3 @@
-```mermaid
-graph TD;
-A-->B;
-A-->C;
-B-->D;
-C-->D;
 
 
 sequenceDiagram
@@ -30,5 +24,4 @@ sequenceDiagram
     deactivate server
 
     Note right of browser: Браузер выполняет обратный вызов (callback) функции, которая отображает заметки
-  
-  ```
+
