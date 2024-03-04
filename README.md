@@ -20,10 +20,10 @@ sequenceDiagram
 
     User->>Browser: Clicks the "Save" button
     Browser->>Server: POST-request for на /exampleapp/notes with data
-    Server->>Browser: Returns a response (for example, "Note saved")
+    Server->>Browser: Returns a 302 response (for example, "Note saved")
 
     Note right of Browser: The browser refreshes the page
-   Browser->>Server: GET-request for https://studies.cs.helsinki.fi/exampleapp/notes
+    Browser->>Server: GET-request for https://studies.cs.helsinki.fi/exampleapp/notes
     Server->>Browser: response  with content-type:text/html charset=utf-8 HTML document 
 
     Browser->>Server: GET-request for CSS-file
