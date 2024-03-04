@@ -4,18 +4,18 @@ sequenceDiagram
     participant Browser
     participant Server
 
-    User->>Browser: Открывает страницу
-    Browser->>User: Отображает страницу
+    User->>Browser: GET https://studies.cs.helsinki.fi/exampleapp/notes
+    Browser->>User: HTML document CSS file JS script 
 
-    User->>Browser: Вводит текст в поле
-    Browser->>User: Отображает введенный текст
+    User->>Browser: Enters text into the field
+    Browser->>User: Displays the entered text
 
-    User->>Browser: Нажимает кнопку "Сохранить"
-    Browser->>Server: POST-запрос на /exampleapp/notes с данными
-    Server->>Browser: Возвращает ответ (например, "Заметка сохранена")
+    User->>Browser: Clicks the "Save" button
+    Browser->>Server: POST-request for на /exampleapp/notes with data
+    Server->>Browser: Returns a response (for example, "Note saved")
 
-    Note right of Browser: Браузер обновляет страницу
-    Browser->>User: Отображает обновленную страницу с новой заметкой
+    Note right of Browser: The browser refreshes the page
+    Browser->>User: Displays a refreshed page with a new note
 
 
 ```
