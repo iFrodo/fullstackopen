@@ -19,7 +19,7 @@ sequenceDiagram
     Browser->>User: Displays the entered text
 
     User->>Browser: Clicks the "Save" button
-    Browser->>Server: POST-request for на /exampleapp/notes with data
+    Browser->>Server: POST-request for  /exampleapp/new-note with data
     Server->>Browser: Returns a 302 response (for example, "Note saved")
 
     Note right of Browser: The browser refreshes the page
