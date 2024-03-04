@@ -33,8 +33,8 @@ sequenceDiagram
     Server->>Browser: response with content-type:application/javascript charset=utf-8 JS file
 
     Browser->>User: Displays a refreshed page with a new note
-
-
+```
+``` mermaid
 sequenceDiagram
     participant User
     participant Browser
