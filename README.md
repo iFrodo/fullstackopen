@@ -6,8 +6,14 @@ sequenceDiagram
 
     User->>Browser: Enters address into the URI field
 
-    Browser->>Server: *GETs-requests for https://studies.cs.helsinki.fi/exampleapp/notes
-    Server->>Browser: *HTML document CSS file JS script 
+    Browser->>Server: GET-requests for https://studies.cs.helsinki.fi/exampleapp/notes
+    Server->>Browser: response  with content-type:text/html charset=utf-8 HTML document 
+
+    Browser->>Server: GET-requests for CSS-file
+    Server->>Browser: response with content-type:text/css charset=utf-8 CSS file
+
+    Browser->>Server: GET-requests for JS-file
+    Server->>Browser: response with content-type:application/javascript charset=utf-8 JS file
 
     User->>Browser: Enters text into the field
     Browser->>User: Displays the entered text
