@@ -4,8 +4,8 @@ sequenceDiagram
     participant Browser
     participant Server
 
-    User->>Browser: GET-request for https://studies.cs.helsinki.fi/exampleapp/notes
-    Browser->>User: HTML document CSS file JS script 
+    Browser->>Server: GET-request for https://studies.cs.helsinki.fi/exampleapp/notes
+    Server->>Browser: HTML document CSS file JS script 
 
     User->>Browser: Enters text into the field
     Browser->>User: Displays the entered text
