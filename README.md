@@ -6,13 +6,13 @@ sequenceDiagram
 
     User->>Browser: Enters address into the URI field
 
-    Browser->>Server: GET-requests for https://studies.cs.helsinki.fi/exampleapp/notes
+    Browser->>Server: GET-request for https://studies.cs.helsinki.fi/exampleapp/notes
     Server->>Browser: response  with content-type:text/html charset=utf-8 HTML document 
 
-    Browser->>Server: GET-requests for CSS-file
+    Browser->>Server: GET-request for CSS-file
     Server->>Browser: response with content-type:text/css charset=utf-8 CSS file
 
-    Browser->>Server: GET-requests for JS-file
+    Browser->>Server: GET-request for JS-file
     Server->>Browser: response with content-type:application/javascript charset=utf-8 JS file
 
     User->>Browser: Enters text into the field
