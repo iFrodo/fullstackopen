@@ -4,9 +4,8 @@ A-->B;
 A-->C;
 B-->D;
 C-->D;
-  ```
-```mermaid
-graph TD;
+
+
 sequenceDiagram
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
     activate server
