@@ -4,7 +4,7 @@ sequenceDiagram
     participant Browser
     participant Server
 
-    User->>Browser: GET https://studies.cs.helsinki.fi/exampleapp/notes
+    User->>Browser: GET-request for https://studies.cs.helsinki.fi/exampleapp/notes
     Browser->>User: HTML document CSS file JS script 
 
     User->>Browser: Enters text into the field
@@ -15,6 +15,8 @@ sequenceDiagram
     Server->>Browser: Returns a response (for example, "Note saved")
 
     Note right of Browser: The browser refreshes the page
+    Browser->>Server: GET-request for https://studies.cs.helsinki.fi/exampleapp/notes
+    Server->>Browser: Returns a response with HTML
     Browser->>User: Displays a refreshed page with a new note
 
 
