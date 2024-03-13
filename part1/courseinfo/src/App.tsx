@@ -1,47 +1,38 @@
+import { useState } from "react";
+
 const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
+
+  const CounterComp = () => {
+    //<stateInit
+    let [counter, setCounter] = useState(0);
+    //stateInit>
+    //<handlers
+    const increaseCounter = () => setCounter(counter + 1);
+    const resetCounter = () => setCounter(0);
+    const minusCounter = () => setCounter(counter - 1);
+    //handlers>
+    //components
+    const DisplayCount = ({ counter }: { counter: number }) => <div>{counter}</div>;
+    const IncreaseButton = ({ increaseCounter, text }: { increaseCounter: React.MouseEventHandler<HTMLButtonElement>, text: string }) => <button onClick={increaseCounter}>{text}</button>;
+    const ResetButton = ({ resetCounter, text }: { resetCounter: React.MouseEventHandler<HTMLButtonElement>, text: string }) => <button onClick={resetCounter}>{text}</button>;
+    const MinusButton = ({ minusCounter, text }: { minusCounter: React.MouseEventHandler<HTMLButtonElement>, text: string }) => <button onClick={minusCounter}>{text}</button>;
+    //components
+    return (
+      <>
+        <DisplayCount counter={counter} />
+        <IncreaseButton increaseCounter={increaseCounter} text={'Increase'} />
+        <ResetButton resetCounter={resetCounter} text={'Reset'} />
+        <MinusButton minusCounter={minusCounter} text={'Minus'} />
+      </>
+    )
   }
-
-  const Header = (props: any) => {
-    return (
-      <h1>{props.courseName}</h1>
-    )
-  };
-
-  const Content = (props: any) => {
-    return (
-      props.parts.map((e: any, index:number) => { return <p key={index}> {e.name} {e.exercises} </p> })
-    )
-  };
-//map((e: any) => { summ += e.exercises })
-  const Total = (props: any) => {
-    let summ = 0;
-    props.parts.forEach((e:any) => summ += e.exercises)
-    return (
-      summ
-    )
-  };
-
   return (
     <>
-      <Header courseName={course.name} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
+      <CounterComp />
+      <CounterComp />
+      <CounterComp />
+      <CounterComp />
+      <CounterComp />
     </>
   )
 };
