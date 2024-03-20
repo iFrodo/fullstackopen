@@ -1,0 +1,34 @@
+{
+  "contacts": [
+    {
+      "id": "1",
+      "name": "Arto",
+      "phone": "+797812312323"
+    },
+    {
+      "id": "be8d",
+      "name": "asdsad",
+      "phone": "+7123123123"
+    },
+    {
+      "id": "46f5",
+      "name": "igor",
+      "phone": "+79785457842"
+    },
+    {
+      "id": "de4f",
+      "name": "Sasha",
+      "phone": "+7123123123"
+    },
+    {
+      "id": "526f",
+      "name": "123",
+      "phone": "+7asdasd"
+    },
+    {
+      "id": "1189",
+      "name": "hello",
+      "phone": "+79785254687"
+    }
+  ]
+}
