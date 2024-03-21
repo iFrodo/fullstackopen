@@ -1,64 +1,85 @@
 import { useState, useEffect } from 'react'
 import contactsService from './services/Contacts.js'
 
-
-const Filter = (props) => {
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className='popup--green'>
+      {message}
+    </div>
+  )
+}
+const Filter = ({ newFilter, onChangge }: any) => {
   return (
     <>
-      filter show with: <input value={props.newFilter} onChange={props.onChangge} />
+      filter show with: <input value={newFilter} onChange={onChangge} />
     </>
   )
 }
-const AddNewPerson = (props) => {
-  console.log(props)
+const AddNewPerson = (props: any) => {
   return (
     <>
+      <Notification message={props.message} />
       <div>name: <input value={props.newName} onChange={props.onChangeName} /></div>
       <div>number: <input value={props.newPhone} onChange={props.onChangePhone} type="tel" /></div>
     </>
   )
 }
-const Persons = (props) => {
+const Persons = (props: any) => {
   return (
     <>
-      {props.filteredPersons.map((person) => <p key={person.id}>{person.name} {person.phone}</p>)}
+      {props.filteredPersons.map((person: any) => <p className='person' key={person.id}>{person.name} {person.phone} <button onClick={() => { props.onDeleteBtnClick(person) }}>delete</button></p>)}
     </>
   )
 }
 const App = () => {
-  const [persons, setPersons] = useState([])
+  const [persons, setPersons] = useState()
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('+7')
-  const [newFilter, setNewFilter] = useState(' ')
+  const [newFilter, setNewFilter] = useState('')
   const [filter, setFilter] = useState('true')
+  const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
-    console.log('effect')
     contactsService.getAll()
       .then(response => {
-        console.log(response)
         setPersons(response)
       })
   }, [])
+  if (!persons) {
+    return null
+  }
   const onSubmitForm = (e) => {
     e.preventDefault()
     const newPerson = {
       name: newName,
       phone: newPhone
     }
-    if (persons.find(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
+    const isDuplicate = persons.find(person => person.name === newName)
+    if (isDuplicate) {
+      if (window.confirm(`${newName} is already added to phonebook,do you want to change number`)) {
+        contactsService.update(isDuplicate.id, newPerson)
+          .then(updatedPerson => setPersons(persons.map(person => person.id !== isDuplicate.id ? person : updatedPerson)))
+        setSuccessMessage(`Updated ${isDuplicate.name} in phonebook`)
+        setTimeout(() => {
+          setSuccessMessage(null)
+        }, 3000)
+
+        console.log(isDuplicate.id)
+      }
     } else {
 
       contactsService.create(newPerson)
         .then(result => {
-          console.log(result)
           setPersons(persons.concat(result));
+          setSuccessMessage(`Added ${result.name} to phonebook`)
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 3000)
         })
-
     }
-
-
   }
   const onChangeName = (e) => {
     setNewName(e.target.value)
@@ -68,10 +89,21 @@ const App = () => {
     setNewPhone(e.target.value)
 
   }
-  const onChangeFilter = (e) => {
+  const onChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewFilter(e.target.value);
     setFilter(e.target.value.trim() !== '');
   };
+  const onDeleteBtnClickOf = (note) => {
+    if (window.confirm(`Do you really want to delete ${note.name}?`)) {
+      contactsService.remove(note.id)
+        .then(remoovedPerson => setPersons(persons.filter(person => person.id != note.id)))
+        .catch(error => {
+          setSuccessMessage(`Error ${note.name} to phonebook`)
+          // setNotes(notes.filter(n => n.id !== id))
+        })
+    }
+    console.log(note.id)
+  }
   const filteredPersons = newFilter.trim() === '' ? persons : persons.filter((person) =>
     person.name.toLowerCase().includes(newFilter.toLowerCase())
   );
@@ -79,20 +111,17 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Filter newFilter={newFilter} onChangge={onChangeFilter} />
-
       <form onSubmit={onSubmitForm}>
         <div>
           <h2>add a new</h2>
-          <AddNewPerson newName={newName} onChangeName={onChangeName} newPhone={newPhone} onChangePhone={onChangePhone} />
-
-
+          <AddNewPerson newName={newName} onChangeName={onChangeName} newPhone={newPhone} onChangePhone={onChangePhone} message={successMessage} />
         </div>
         <div>
           <button type="submit">add</button>
         </div>
       </form>
       <h2>Numbers</h2>
-      <Persons filteredPersons={filteredPersons} />
+      <Persons filteredPersons={filteredPersons} onDeleteBtnClick={onDeleteBtnClickOf} />
     </div>
   )
 }
