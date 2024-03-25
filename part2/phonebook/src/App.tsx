@@ -2,14 +2,30 @@ import { useState, useEffect } from 'react'
 import contactsService from './services/Contacts.js'
 
 const Notification = ({ message }) => {
+  console.log(message)
   if (message === null) {
     return null
   }
-  return (
-    <div className='popup--green'>
-      {message}
-    </div>
-  )
+
+  if (message.id === 1) {
+    return (
+      <div className='popup--green'>
+        Contact {message.message} was updated
+      </div>
+    )
+  } else if (message.id === 2) {
+    return (<div className='popup--green'>
+      Contact {message.message} was created
+    </div>)
+  } else if (message.id === 3) {
+    return (<div className='popup--red'>
+      Error, Contact {message.message} was already deleted!
+    </div>)
+
+  }
+
+
+
 }
 const Filter = ({ newFilter, onChangge }: any) => {
   return (
@@ -40,7 +56,7 @@ const App = () => {
   const [newPhone, setNewPhone] = useState('+7')
   const [newFilter, setNewFilter] = useState('')
   const [filter, setFilter] = useState('true')
-  const [successMessage, setSuccessMessage] = useState(null)
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     contactsService.getAll()
@@ -62,9 +78,9 @@ const App = () => {
       if (window.confirm(`${newName} is already added to phonebook,do you want to change number`)) {
         contactsService.update(isDuplicate.id, newPerson)
           .then(updatedPerson => setPersons(persons.map(person => person.id !== isDuplicate.id ? person : updatedPerson)))
-        setSuccessMessage(`Updated ${isDuplicate.name} in phonebook`)
+        setMessage({ id: 1, message: isDuplicate.name })
         setTimeout(() => {
-          setSuccessMessage(null)
+          setMessage(null)
         }, 3000)
 
         console.log(isDuplicate.id)
@@ -74,9 +90,9 @@ const App = () => {
       contactsService.create(newPerson)
         .then(result => {
           setPersons(persons.concat(result));
-          setSuccessMessage(`Added ${result.name} to phonebook`)
+          setMessage({ id: 2, message: result.name })
           setTimeout(() => {
-            setSuccessMessage(null)
+            setMessage(null)
           }, 3000)
         })
     }
@@ -98,9 +114,13 @@ const App = () => {
       contactsService.remove(note.id)
         .then(remoovedPerson => setPersons(persons.filter(person => person.id != note.id)))
         .catch(error => {
-          setSuccessMessage(`Error ${note.name} to phonebook`)
+          setMessage({ id: 3, message: note.name })
+          setTimeout(() => {
+            setMessage(null)
+          }, 3000)
           // setNotes(notes.filter(n => n.id !== id))
         })
+
     }
     console.log(note.id)
   }
@@ -114,7 +134,7 @@ const App = () => {
       <form onSubmit={onSubmitForm}>
         <div>
           <h2>add a new</h2>
-          <AddNewPerson newName={newName} onChangeName={onChangeName} newPhone={newPhone} onChangePhone={onChangePhone} message={successMessage} />
+          <AddNewPerson newName={newName} onChangeName={onChangeName} newPhone={newPhone} onChangePhone={onChangePhone} message={message} />
         </div>
         <div>
           <button type="submit">add</button>
