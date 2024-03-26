@@ -20,9 +20,9 @@ const CountriesToShow = ({ filteredCountries, handleChangeValue }) => {
       getWeather(filteredCountries[0].latlng[0], filteredCountries[0].latlng[1]);
       setClickedCountry(null)
     }
-    if (handleChangeValue.length === 0) {
-      setClickedCountry(null)
-    }
+    // if (handleChangeValue.length === 0) {
+    //   setClickedCountry(null)
+    // }
   }, [filteredCountries]);
 
   const onClickBtn = (name) => {
@@ -32,9 +32,10 @@ const CountriesToShow = ({ filteredCountries, handleChangeValue }) => {
 
   return (
     <>
+
       {filteredCountries.length === 1 ?
         <>
-
+          <hr />
           <h1>{filteredCountries[0].name['common']}</h1>
           <div>
             <p>Capital : {filteredCountries[0]["capital"]}</p>
@@ -52,6 +53,8 @@ const CountriesToShow = ({ filteredCountries, handleChangeValue }) => {
 
       {clickedCountry && (
         <div >
+          <hr />
+          <h1>{clickedCountry.name.common}</h1>
           <p>Capital : {clickedCountry.capital}</p>
           <p>Area : {clickedCountry.area}km</p>
           <p>Population : {clickedCountry.population} peaple</p>
