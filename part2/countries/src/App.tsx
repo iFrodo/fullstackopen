@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const apiKey =''
 
-const CountriesToShow = ({ filteredCountries }) => {
+const apiKey = ''
+
+const CountriesToShow = ({ filteredCountries, handleChangeValue }) => {
   const [clickedCountry, setClickedCountry] = useState(null)
   const [weather, setWeather] = useState(null)
+
+  console.log()
+
   const getWeather = async (lat, lon) => {
     let response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`);
     setWeather(response.data);
@@ -14,10 +18,15 @@ const CountriesToShow = ({ filteredCountries }) => {
   useEffect(() => {
     if (filteredCountries.length === 1) {
       getWeather(filteredCountries[0].latlng[0], filteredCountries[0].latlng[1]);
+      setClickedCountry(null)
+    }
+    if (handleChangeValue.length === 0) {
+      setClickedCountry(null)
     }
   }, [filteredCountries]);
 
   const onClickBtn = (name) => {
+
     axios.get(`https://studies.cs.helsinki.fi/restcountries/api/name/${name}`).then(response => setClickedCountry(response.data))
   }
 
@@ -87,7 +96,7 @@ const App = () => {
         country: <input value={value} onChange={handleChange} />
       </form>
       <pre>
-        <CountriesToShow filteredCountries={filteredCountries} />
+        <CountriesToShow filteredCountries={filteredCountries} handleChangeValue={value} />
 
       </pre>
     </div>
