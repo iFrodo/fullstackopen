@@ -2,13 +2,11 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 
-const apiKey = ''
+const apiKey = '62fdd5b3e828bd3648065d4602398cce'
 
-const CountriesToShow = ({ filteredCountries, handleChangeValue }) => {
+const CountriesToShow = ({ filteredCountries }) => {
   const [clickedCountry, setClickedCountry] = useState(null)
   const [weather, setWeather] = useState(null)
-
-  console.log()
 
   const getWeather = async (lat, lon) => {
     let response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`);
@@ -88,19 +86,16 @@ const App = () => {
     setValue(e.target.value)
 
   }
-
   const filteredCountries = value.trim() === '' ? allCountries : allCountries.filter((country) =>
     country.name.common.toLowerCase().includes(value.toLowerCase())
   );
-
   return (
     <div>
       <form >
         country: <input value={value} onChange={handleChange} />
       </form>
       <pre>
-        <CountriesToShow filteredCountries={filteredCountries} handleChangeValue={value} />
-
+        <CountriesToShow filteredCountries={filteredCountries} />
       </pre>
     </div>
   )

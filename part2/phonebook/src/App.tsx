@@ -1,8 +1,15 @@
 import { useState, useEffect } from 'react'
 import contactsService from './services/Contacts.js'
-
-const Notification = ({ message }) => {
-  console.log(message)
+interface IPerson {
+  id: Number,
+  name: String,
+  number: Number
+}
+interface IMessage {
+  id: number;
+  message: String;
+}
+const Notification = ({ message }: any) => {
   if (message === null) {
     return null
   }
@@ -18,10 +25,14 @@ const Notification = ({ message }) => {
       Contact {message.message} was created
     </div>)
   } else if (message.id === 3) {
-    return (<div className='popup--red'>
-      Error, Contact {message.message} was already deleted!
+    return (<div className='popup--green'>
+      Contact {message.message} was  deleted!
     </div>)
 
+  } else if (message.id === 4) {
+    return (<div className='popup--green'>
+      Contact {message.message} was  deleted!
+    </div>)
   }
 
 
@@ -46,17 +57,18 @@ const AddNewPerson = (props: any) => {
 const Persons = (props: any) => {
   return (
     <>
-      {props.filteredPersons.map((person: any) => <p className='person' key={person.id}>{person.name} {person.phone} <button onClick={() => { props.onDeleteBtnClick(person) }}>delete</button></p>)}
+      {props.filteredPersons.map((person: any) => <p className='person' key={person.id}>{person.name} {person.number} <button onClick={() => { props.onDeleteBtnClick(person) }}>delete</button></p>)}
     </>
   )
 }
 const App = () => {
-  const [persons, setPersons] = useState()
+  const [persons, setPersons] = useState<IPerson[]>([]);
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('+7')
   const [newFilter, setNewFilter] = useState('')
   const [filter, setFilter] = useState('true')
-  const [message, setMessage] = useState(null)
+  const [message, setMessage] = useState<IMessage | null>(null);
+console.log(filter);
 
   useEffect(() => {
     contactsService.getAll()
@@ -67,23 +79,22 @@ const App = () => {
   if (!persons) {
     return null
   }
-  const onSubmitForm = (e) => {
+  const onSubmitForm = (e: any) => {
     e.preventDefault()
     const newPerson = {
       name: newName,
-      phone: newPhone
+      number: newPhone
     }
     const isDuplicate = persons.find(person => person.name === newName)
     if (isDuplicate) {
       if (window.confirm(`${newName} is already added to phonebook,do you want to change number`)) {
         contactsService.update(isDuplicate.id, newPerson)
           .then(updatedPerson => setPersons(persons.map(person => person.id !== isDuplicate.id ? person : updatedPerson)))
+
         setMessage({ id: 1, message: isDuplicate.name })
         setTimeout(() => {
           setMessage(null)
         }, 3000)
-
-        console.log(isDuplicate.id)
       }
     } else {
 
@@ -97,33 +108,43 @@ const App = () => {
         })
     }
   }
-  const onChangeName = (e) => {
+  const onChangeName = (e:any) => {
     setNewName(e.target.value)
 
   }
-  const onChangePhone = (e) => {
+  const onChangePhone = (e:any) => {
     setNewPhone(e.target.value)
 
   }
   const onChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewFilter(e.target.value);
-    setFilter(e.target.value.trim() !== '');
+    setFilter(String(e.target.value.trim() !== ''));
   };
-  const onDeleteBtnClickOf = (note) => {
+  
+  const onDeleteBtnClickOf = (note:any) => {
     if (window.confirm(`Do you really want to delete ${note.name}?`)) {
       contactsService.remove(note.id)
-        .then(remoovedPerson => setPersons(persons.filter(person => person.id != note.id)))
-        .catch(error => {
-          setMessage({ id: 3, message: note.name })
+        .then(remoovedPerson => {
+          console.log(remoovedPerson);
+          
+          setPersons(persons.filter(person => person.id != note.id));
+          setMessage({ id: 3, message: note.name });
           setTimeout(() => {
-            setMessage(null)
-          }, 3000)
-          // setNotes(notes.filter(n => n.id !== id))
+            setMessage(null);
+          }, 3000);
         })
-
+        .catch(error => {
+          console.log(error);
+          
+          setMessage({ id: 4, message: note.name });
+          setTimeout(() => {
+            setMessage(null);
+          }, 3000);
+          // setNotes(notes.filter(n => n.id !== id));
+        });
     }
-    console.log(note.id)
-  }
+  };
+  
   const filteredPersons = newFilter.trim() === '' ? persons : persons.filter((person) =>
     person.name.toLowerCase().includes(newFilter.toLowerCase())
   );

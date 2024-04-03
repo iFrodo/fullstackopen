@@ -1,4 +1,4 @@
-export const Note = ({ note }) => {
+export const Note = ({ note }:any) => {
         return (
             <>
                 <li >{note.content}</li>
