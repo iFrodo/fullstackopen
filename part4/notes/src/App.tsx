@@ -61,8 +61,6 @@ const App = () => {
   };
   const onDeleteClickBtn = (noteId: any) => {
     notesService.remove(noteId).then(notes => setNotes(notes))
-
-    console.log(noteId)
   }
   return (
     <>
