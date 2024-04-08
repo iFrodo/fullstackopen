@@ -1,12 +1,12 @@
 const totalLikes = (blog) => {
-    console.log(blog)
     let result = 0
     if (blog.length > 1) {
         blog.map(el => result += el.likes)
         return result
-    } else {
-        return blog.likes
+    } else if (blog.length === 1) {
+        return blog[0].likes
     }
 
+
 }
-module.export = totalLikes
+module.exports = totalLikes
