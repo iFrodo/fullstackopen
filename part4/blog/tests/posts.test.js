@@ -11,15 +11,15 @@ beforeEach(async () => {
     await Blog.deleteMany({})
 
 
-    let noteObject = new Blog(helper.initialNotes[0])
+    let noteObject = new Blog(helper.initialBlogs[0])
     await noteObject.save()
 
 
-    noteObject = new Blog(helper.initialNotes[1])
+    noteObject = new Blog(helper.initialBlogs[1])
     await noteObject.save()
 })
 
-test('notes are returned as json', async () => {
+test('blogs are returned as json', async () => {
     await api
         .get('/api/blogs')
         .expect(200)
@@ -92,6 +92,35 @@ test('создание нового блога', async () => {
 
     // Проверяем, что количество записей не изменилось
     assert.strictEqual(updatedBlogs.length, initialBlogs.length);
+});
+test('a note can be deleted', async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const noteToDelete = blogsAtStart[0];
+
+    await api
+        .delete(`/api/blogs/${noteToDelete.id}`)
+        .expect(204);
+
+    const blogsAtEnd = await helper.blogsInDb();
+
+    // Проверяем, что заметка с таким id больше не существует
+    const deletedNote = blogsAtEnd.find(note => note.id === noteToDelete.id);
+    assert.strictEqual(deletedNote, undefined, 'Note should be deleted');
+
+    // Проверяем, что длина массива уменьшилась на 1
+    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1);
+});
+
+test('a note can be changed', async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const noteToChange = blogsAtStart[0];
+
+    await api
+        .put(`/api/blogs/${noteToChange.id}`)
+        .expect(201);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    noteToChange.likes === blogsAtEnd[0].likes ? assert.ok('Note should have been changed') : assert.ok('Note should not have been changed');
 });
 
 after(async () => {
