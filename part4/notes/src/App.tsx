@@ -60,7 +60,8 @@ const App = () => {
     }
   };
   const onDeleteClickBtn = (noteId: any) => {
-    notesService.remove(noteId).then(notes => setNotes(notes))
+    notesService.remove(noteId)
+    setNotes(notes.filter(el => el.id !== noteId))
   }
   return (
     <>

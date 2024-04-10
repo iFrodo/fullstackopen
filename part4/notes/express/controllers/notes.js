@@ -1,34 +1,27 @@
 const notesRouter = require('express').Router()
-const Note = require('../models/Note')
+const Note = require('../models/note')
+const User = require('../models/user')
 
 
-notesRouter.get('/', async (req, res, error) => {
-    const notes = await Note.find({}).then(
-        (notes) => {
-            if (notes) {
-                res.json(notes);
-            }
-        }
-    ).catch(error => next(error))
+notesRouter.get('/', async (req, res, next) => {
+    const notes = await Note.find({}).populate('user', { login: 1, name: 1 });
+    res.json(notes);
 })
 notesRouter.get('/:id', async (req, res, next) => {
     const note = await Note.findById(req.params.id)
-        .then((note) => {
-            if (note) {
-                res.json(note)
-            } else res.status(404).end()
-        })
-        .catch((error) => {
-            next(error)
-        })
+    res.json(note)
 })
-notesRouter.post('/', async (req, res) => {
+notesRouter.post('/', async (req, res, next) => {
+    const user = await User.findById(req.body.userId)
     const note = new Note({
         content: req.body.content,
-        important: req.body.important
+        important: req.body.important,
+        user: user.id
     });
-    const savedNote = await note.save();
-    res.json(savedNote);
+    const savedNote = await note.save()
+    user.notes = user.notes.concat(savedNote._id)
+    await user.save()
+    res.status(201).json(savedNote);
 })
 notesRouter.put('/:id', async (req, res) => {
     const { content, important } = req.body
@@ -37,17 +30,11 @@ notesRouter.put('/:id', async (req, res) => {
         { content, important },
         { new: true, runValidators: true, context: 'query' }
     );
-    if (updatedNote) {
-        res.json(updatedNote)
-    }
+    res.json(updatedNote)
 });
 notesRouter.delete('/:id', async (req, res, next) => {
     await Note.findByIdAndDelete(req.params.id)
-        .then(async (result) => {
-            res.json(await Note.find({}))
-            res.status(204).end
-        }
-        ).catch(error => next(error))
+    res.status(204).end()
 })
 
 module.exports = notesRouter
