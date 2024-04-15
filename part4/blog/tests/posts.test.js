@@ -6,9 +6,11 @@ const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 beforeEach(async () => {
     await Blog.deleteMany({})
+    await User.deleteMany({})
 
 
     let noteObject = new Blog(helper.initialBlogs[0])
@@ -122,6 +124,30 @@ test('a note can be changed', async () => {
     const blogsAtEnd = await helper.blogsInDb();
     noteToChange.likes === blogsAtEnd[0].likes ? assert.ok('Note should have been changed') : assert.ok('Note should not have been changed');
 });
+
+
+test('creation succeeds with a fresh username', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+        login: 'mluukkai',
+        name: 'Matti Luukkainen',
+        password: 'salainen',
+    }
+
+    await api
+        .post('/api/users')
+        .send(newUser)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)
+
+    const usernames = usersAtEnd.map(u => u.login)
+    assert(usernames.includes(newUser.login))
+})
+
 
 after(async () => {
     await mongoose.connection.close()
