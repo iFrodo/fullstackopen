@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt')
 const loginRouter = require('express').Router()
 const User = require('../models/user')
 
-loginRouter.post('/', async (request, response) => {
+loginRouter.post("/", async (request, response) => {
     const { login, password } = request.body
 
     const user = await User.findOne({ login })
@@ -19,7 +19,7 @@ loginRouter.post('/', async (request, response) => {
             error: 'invalid login or password'
         })
     }
-    
+
     const userForToken = {
         login: user.login,
         id: user._id,
