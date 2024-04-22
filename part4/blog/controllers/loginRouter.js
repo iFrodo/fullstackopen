@@ -10,7 +10,6 @@ const SECRET = require('../utils/config').SECRET
 loginRouter.post('/', async (req, res, next) => {
     const { login, password } = req.body
     const user = await User.findOne({ login })
-    console.log(SECRET)
     const passwordCorrect = user === null ? false : await bcrypt.compare(password, user.passwordHash)
 
     if (!(user && passwordCorrect)) {
@@ -22,7 +21,11 @@ loginRouter.post('/', async (req, res, next) => {
         login: user.login,
         id: user.id
     }
-    const token = jwt.sign(userForToken, SECRET)
+    const token = jwt.sign(
+        userForToken, 
+        process.env.SECRET,
+        { expiresIn: 60*60 }
+      )
 
 
     res.status(201).json({ token, login: user.login, name: user.name })
