@@ -1,4 +1,5 @@
 const Blog = require('../models/blog.js')
+const User = require('../models/user.js')
 const jwt = require('jsonwebtoken')
 const logger = require('./logger.js')
 const requestLogger = (request, response, next) => {
@@ -40,17 +41,15 @@ const tokenExtractor = (request, response, next) => {
     }
     next()
 }
-const tokenDecoder = async (request, response, next) => {
-    // const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    // if (!decodedToken.id) {
-    //     return response.status(401).json({ error: 'token invalid' })
-    // }
+const userExtractor = async (request, response, next) => {
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    if (!decodedToken.id) {
+        return response.status(401).json({ error: 'token invalid' })
+    }
+    const user = await User.findById(decodedToken.id)
 
-    // request.user = await Blog.findById(request.params.id)
-    // console.log(request.token,request
-    // )
-    request.user = 'PREVED MEDVED'
+    request.user = user
     next()
 }
 
-module.exports = { unknownEndpoint, errorHandler, requestLogger, tokenExtractor, tokenDecoder }
+module.exports = { unknownEndpoint, errorHandler, requestLogger, tokenExtractor, userExtractor }
