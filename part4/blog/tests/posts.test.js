@@ -7,6 +7,8 @@ const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const exp = require('node:constants')
+const bcrypt = require('bcrypt')
 
 beforeEach(async () => {
     await Blog.deleteMany({})
@@ -14,19 +16,38 @@ beforeEach(async () => {
 
 
     let noteObject = new Blog(helper.initialBlogs[0])
+
     await noteObject.save()
+
 
 
     noteObject = new Blog(helper.initialBlogs[1])
     await noteObject.save()
 })
 
+
 test('blogs are returned as json', async () => {
-    await api
+    // Отправляем запрос на аутентификацию и получаем токен
+    const user = new User({
+        login: 'admin',
+        name: 'admin',
+        passwordHash: await bcrypt.hash('12345', 10)
+    })
+    await user.save()
+    const response = await api.post('/api/login').send(user);
+    const token = response.body.token;
+
+    // Отправляем запрос на получение списка блогов с токеном
+    const blogsResponse = await api
         .get('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .expect(200)
-        .expect('Content-Type', /application\/json/)
-})
+        .expect('Content-Type', /application\/json/);
+
+    // Проверяем, что в ответе есть свойство 'blogs' и оно является массивом
+    expect(blogsResponse.body).toHaveProperty('blogs');
+    expect(Array.isArray(blogsResponse.body.blogs)).toBe(true);
+});
 
 
 test('id must not be _id', async () => {
