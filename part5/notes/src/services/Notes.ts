@@ -5,6 +5,11 @@ export interface IPerson {
   content: string;
   important: boolean;
 }
+let token = null
+
+const setToken = newToken => {
+  token = `Bearer ${newToken}`
+}
 
 const baseUrl = 'http://localhost:3001/api/notes';
 
@@ -13,10 +18,14 @@ const getAll = (): Promise<IPerson[]> => {
   return request.then((response: AxiosResponse<IPerson[]>) => response.data);
 };
 
-const create = (newObject: IPerson): Promise<IPerson> => {
-  const request = axios.post<IPerson>(baseUrl, newObject);
-  return request.then((response: AxiosResponse<IPerson>) => response.data);
-};
+const create = async newObject => {
+  const config = {
+    headers: { Authorization: token },
+  }
+
+  const response = await axios.post(baseUrl, newObject, config)
+  return response.data
+}
 
 const update = (id: number, newObject: IPerson): Promise<IPerson> => {
   const request = axios.put<IPerson>(`${baseUrl}/${id}`, newObject);
@@ -28,9 +37,4 @@ const remove = (id: number): Promise<IPerson> => {
 };
 
 
-export default {
-  getAll,
-  create,
-  update,
-  remove
-};
+export default { getAll, create, update, setToken }

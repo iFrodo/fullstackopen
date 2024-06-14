@@ -38,10 +38,10 @@ const App = () => {
     notesService
       .create(newObj)
       .then((returnedNote: any) => {
+        console.log(user)
         setNotes(notes.concat(returnedNote));
         setNewNote('');
       });
-    console.log(notes);
   };
 
   const handleLogin = async (event: FormEvent) => {
@@ -51,7 +51,9 @@ const App = () => {
       const user = await loginService.login({
         login, password,
       })
+      
       setUser(user)
+      notesService.setToken(user.token)
       setLogin('')
       setPassword('')
     } catch (exception) {
@@ -86,6 +88,43 @@ const App = () => {
     notesService.remove(noteId)
     setNotes(notes.filter(el => el.id !== noteId))
   }
+
+  const loginForm = () => (
+    <form onSubmit={handleLogin}>
+      <div>
+        login
+        <input
+          type="text"
+          value={login}
+          name="login"
+          onChange={({ target }) => setLogin(target.value)}
+        />
+      </div>
+      <div>
+        password
+        <input
+          type="password"
+          value={password}
+          name="Password"
+          onChange={({ target }) => setPassword(target.value)}
+        />
+      </div>
+      <button type="submit">login</button>
+    </form>
+  )
+  const noteForm = () => (
+    <form onSubmit={handlerOnSubmitClick}>
+      <input
+        value={newNote}
+        onChange={onChangeInputValue}
+      />
+      <button type="submit">save</button>
+    </form>
+  )
+
+
+
+
   return (
     <>
       <ul>
@@ -94,25 +133,15 @@ const App = () => {
         )}
       </ul>
 
-
-
-      <form onSubmit={handleLogin}>
-        <h2>Authorization</h2>
-        <div>login'''''''''<input type="text" value={login} onChange={({ target }) => setLogin(target.value)} /></div>
-        <div>password<input type="password" value={password} onChange={({ target }) => setPassword(target.value)} /></div>
-        <button type="submit">login</button>
-      </form>
-
-
-
-
-      <form onSubmit={handlerOnSubmitClick}>
-        <input value={newNote} onChange={onChangeInputValue} />
-        <button type="submit">save</button>
-      </form>
-      <button onClick={() => setShowAll(!showAll)}>
-        show {showAll ? 'important' : 'all'}
-      </button>
+      {user === null ?
+        loginForm() :
+        <div>
+          <p>{user.login} logged-in</p>
+          {noteForm()}
+        </div>
+      }
+      {/* {user === null && loginForm()}
+      {user !== null && noteForm()} */}
     </>
   );
 };
