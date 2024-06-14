@@ -26,6 +26,16 @@ const App = () => {
       });
   }, []);
 
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      notesService.setToken(user.token)
+    }
+  }, [])
+
   console.log('render', notes.length, 'notes');
 
   const notesToShow = showAll ? notes : notes.filter(note => note.important);
@@ -51,9 +61,12 @@ const App = () => {
       const user = await loginService.login({
         login, password,
       })
-      
+
       setUser(user)
       notesService.setToken(user.token)
+      window.localStorage.setItem(
+        'loggedNoteappUser', JSON.stringify(user)
+      )
       setLogin('')
       setPassword('')
     } catch (exception) {
