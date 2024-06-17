@@ -13,7 +13,7 @@ const getTokenFrom = request => {
 
 
 notesRouter.get('/', async (req, res, next) => {
-    const notes = await Note.find({}).populate('user', { login: 1, name: 1 });
+    const notes = await Note.find({}).populate('user', { name: 1 });
     res.json(notes);
 })
 notesRouter.get('/:id', async (req, res, next) => {
