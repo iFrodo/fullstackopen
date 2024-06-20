@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
-import blogService from './services/blogs'
+import blogService from './services/blogService'
 import loginService from './services/loginService'
 
 
@@ -12,10 +12,20 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      console.log(user.token)
       blogService.getAll().then((blogs) => setBlogs(blogs));
     }
   }, [user]);
+
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('user')
+    console.log(loggedUserJSON)
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
+  }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -25,6 +35,7 @@ const App = () => {
         password,
       });
       blogService.setToken(user.token);
+      window.localStorage.setItem('user', JSON.stringify(user))
       setUser(user);
       setLogin('');
       setPassword('');
@@ -32,10 +43,15 @@ const App = () => {
       console.error('Ошибка при входе:', error.message);
     }
   };
+  const handleLogout = () => {
+    window.localStorage.removeItem('user')
+    setUser(null)
+  }
 
   const loginForm = () => (
     <form onSubmit={handleLogin}>
       <div>
+        <h2>Log in to application</h2>
         login
         <input
           type="text"
@@ -64,6 +80,7 @@ const App = () => {
       ) : (
         <div>
           <h2>blogs</h2>
+          <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
           ))}

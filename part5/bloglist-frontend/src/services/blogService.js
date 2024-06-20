@@ -13,7 +13,6 @@ const getAll = () => {
       Authorization: token,
     },
   };
-  console.log(config)
   const request = axios.get(baseUrl, config)
   return request.then(response => response.data)
 }
