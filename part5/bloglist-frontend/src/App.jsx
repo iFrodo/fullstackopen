@@ -4,15 +4,18 @@ import blogService from './services/blogService'
 import loginService from './services/loginService'
 
 
+
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const [newBlog, setNewBlog] = useState('');
+  // const [newBlog, setNewBlog] = useState('');
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
+  const [message, setMessage] = useState(null)
+
 
   useEffect(() => {
     if (user) {
@@ -29,6 +32,37 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  const Notification = ({ message }) => {
+    if (message !== null) {
+      return (
+        <div className='popup--green'>
+          Blog was created
+        </div>
+      )
+    }
+
+    if (message === 1) {
+      return (
+        <div className='popup--green'>
+          Contact {message.message} was updated
+        </div>
+      )
+    } else if (message === 2) {
+      return (<div className='popup--green'>
+        Contact  was created
+      </div>)
+    } else if (message === 3) {
+      return (<div className='popup--green'>
+        Contact  was  deleted!
+      </div>)
+
+    } else if (message === 4) {
+      return (<div className='popup--green'>
+        Contact  was  deleted!
+      </div>)
+    }
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -60,6 +94,11 @@ const App = () => {
       user: user
     }
     const response = await blogService.create(newBlog)
+    setMessage(1)
+    setTimeout(() => {
+      setMessage(null)
+    }, 3000)
+
     setBlogs(blogs.concat(response))
   }
 
@@ -106,7 +145,7 @@ const App = () => {
         <input
           type="text"
           value={author}
-          name=" Author"
+          name="Author"
           onChange={({ target }) => setAuthor(target.value)}
         />
       </div>
@@ -115,7 +154,7 @@ const App = () => {
         <input
           type="text"
           value={url}
-          name=" Author"
+          name="Author"
           onChange={({ target }) => setUrl(target.value)}
         />
       </div>
@@ -124,21 +163,21 @@ const App = () => {
   );
 
   return (
-    <div>
-      {user === null ? (
+    <>
+      {user === null ?
         loginForm()
-      ) : (
-        <div>
+        :
+        <>
+          <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
           <div>{BlogForm()}</div>
           <h2>blogs</h2>
-          <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
-
+          <Notification message={message} />
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
           ))}
-        </div>
-      )}
-    </div>
+        </>
+      }
+    </>
   );
 };
 
