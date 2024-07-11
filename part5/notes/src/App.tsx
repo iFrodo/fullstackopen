@@ -15,7 +15,7 @@ interface INote {
 
 const App = () => {
   const [notes, setNotes] = useState<INote[]>([]);
-  const [newNote, setNewNote] = useState('a new note...');
+  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true);
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
@@ -45,20 +45,18 @@ const App = () => {
   console.log('render', notes.length, 'notes');
 
   const notesToShow = showAll ? notes : notes.filter(note => note.important);
-  const handlerOnSubmitClick = (e: FormEvent) => {
-    e.preventDefault();
-    const newObj: IPerson = {
-      content: newNote,
-      important: Math.random() < 0.5,
-    };
+
+
+  const addNote = (noteObject) => {
     notesService
-      .create(newObj)
+      .create(noteObject)
       .then((returnedNote: any) => {
         console.log(user)
         setNotes(notes.concat(returnedNote));
         setNewNote('');
       });
-  };
+  }
+
 
   const handleLogin = async (event: FormEvent) => {
     event.preventDefault()
@@ -82,11 +80,6 @@ const App = () => {
       }, 5000)
     }
   }
-
-  const onChangeInputValue = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewNote(e.target.value);
-  };
-
   const toggleImportanceOf = (id: number) => {
     const note = notes.find(n => n.id === id);
     if (note) {
@@ -107,7 +100,7 @@ const App = () => {
     notesService.remove(noteId)
     setNotes(notes.filter(el => el.id !== noteId))
   }
-  
+
   return (
     <>
       {user === null ?
@@ -118,7 +111,7 @@ const App = () => {
         <div>
           <h2 >Notes</h2>
           <p>{user.login} logged-in <button onClick={() => { localStorage.clear(), setUser(null) }}>logout</button></p>
-          <NoteForm onChangeInputValue={onChangeInputValue} handlerOnSubmitClick={handlerOnSubmitClick} newNote={newNote} />
+          <NoteForm createNote={addNote} />
           <ul>
             {notesToShow.map((note) =>
               <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)} onDeleteClickBtn={() => onDeleteClickBtn(note.id)} />
