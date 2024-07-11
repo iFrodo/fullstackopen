@@ -9,6 +9,30 @@ interface INote {
   important: boolean;
 }
 
+const LoginForm = ({ handleLogin, login, handleLoginChange, password, handlePasswordChange }) => (
+
+  <form onSubmit={handleLogin}>
+    <div>
+      login
+      <input
+        type="text"
+        value={login}
+        name="login"
+        onChange={handleLoginChange}
+      />
+    </div>
+    <div>
+      password
+      <input
+        type="password"
+        value={password}
+        name="Password"
+        onChange={handlePasswordChange}
+      />
+    </div>
+    <button type="submit">login</button>
+  </form>
+)
 const App = () => {
   const [notes, setNotes] = useState<INote[]>([]);
   const [newNote, setNewNote] = useState('a new note...');
@@ -17,6 +41,8 @@ const App = () => {
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null)
   const [error, setErrorMessage] = useState('')
+  const [loginVisible, setLoginVisible] = useState(false)
+
 
   useEffect(() => {
     console.log('effect');
@@ -102,29 +128,7 @@ const App = () => {
     setNotes(notes.filter(el => el.id !== noteId))
   }
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        login
-        <input
-          type="text"
-          value={login}
-          name="login"
-          onChange={({ target }) => setLogin(target.value)}
-        />
-      </div>
-      <div>
-        password
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
-  )
+
   const noteForm = () => (
     <form onSubmit={handlerOnSubmitClick}>
       <input
@@ -137,22 +141,39 @@ const App = () => {
 
 
 
+  const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
+
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>log in</button>
+        </div>
+        <div style={showWhenVisible}>
+          <LoginForm handleLogin={handleLogin} login={login} handleLoginChange={({ target }) => setLogin(target.value)} password={password} handlePasswordChange={({ target }) => setPassword(target.value)} />
+          <button onClick={() => setLoginVisible(false)}>cancel</button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <>
-      <ul>
-        {notesToShow.map((note) =>
-          <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)} onDeleteClickBtn={() => onDeleteClickBtn(note.id)} />
-        )}
-      </ul>
-
       {user === null ?
         loginForm() :
         <div>
-          <p>{user.login} logged-in</p>
+          <h2 >Notes</h2>
+          <p>{user.login} logged-in <button onClick={() => { localStorage.clear(), setUser(null) }}>logout</button></p>
           {noteForm()}
+          <ul>
+            {notesToShow.map((note) =>
+              <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)} onDeleteClickBtn={() => onDeleteClickBtn(note.id)} />
+            )}
+          </ul>
         </div>
       }
+
       {/* {user === null && loginForm()}
       {user !== null && noteForm()} */}
     </>

@@ -34,34 +34,41 @@ const App = () => {
   }, [])
 
   const Notification = ({ message }) => {
-    if (message !== null) {
+    if (message === 1) {
       return (
         <div className='popup--green'>
           Blog was created
         </div>
       )
     }
-
-    if (message === 1) {
+    if (message === 2) {
       return (
-        <div className='popup--green'>
-          Contact {message.message} was updated
+        <div className='popup--red'>
+          wrond credentials
         </div>
       )
-    } else if (message === 2) {
-      return (<div className='popup--green'>
-        Contact  was created
-      </div>)
-    } else if (message === 3) {
-      return (<div className='popup--green'>
-        Contact  was  deleted!
-      </div>)
-
-    } else if (message === 4) {
-      return (<div className='popup--green'>
-        Contact  was  deleted!
-      </div>)
     }
+
+    // if (message === 1) {
+    //   return (
+    //     <div className='popup--green'>
+    //       Contact {message.message} was updated
+    //     </div>
+    //   )
+    // } else if (message === 2) {
+    //   return (<div className='popup--green'>
+    //     Contact  was created
+    //   </div>)
+    // } else if (message === 3) {
+    //   return (<div className='popup--green'>
+    //     Contact  was  deleted!
+    //   </div>)
+
+    // } else if (message === 4) {
+    //   return (<div className='popup--green'>
+    //     Contact  was  deleted!
+    //   </div>)
+    // }
   }
 
   const handleLogin = async (event) => {
@@ -77,6 +84,10 @@ const App = () => {
       setLogin('');
       setPassword('');
     } catch (error) {
+      setMessage(2)
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000)
       console.error('Ошибка при входе:', error.message);
     }
   };
@@ -102,76 +113,81 @@ const App = () => {
     setBlogs(blogs.concat(response))
   }
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        <h2>Log in to application</h2>
-        login
-        <input
-          type="text"
-          value={login}
-          name="Login"
-          onChange={({ target }) => setLogin(target.value)}
-        />
-      </div>
-      <div>
-        password
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
+  const LoginForm = () => (
+    <>
+      <Notification message={message} />
+      <form onSubmit={handleLogin}>
+        <div>
+          <h2>Log in to application</h2>
+          login
+          <input
+            type="text"
+            value={login}
+            name="Login"
+            onChange={({ target }) => setLogin(target.value)}
+          />
+        </div>
+        <div>
+          password
+          <input
+            type="password"
+            value={password}
+            name="Password"
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </div>
+        <button type="submit">login</button>
+      </form>
+    </>
   );
 
-
   const BlogForm = () => (
-    <form onSubmit={handleBlog}>
-      <div>
-        <h2>Create new blog</h2>
-        title
-        <input
-          type="text"
-          value={title}
-          name="Title"
-          onChange={({ target }) => setTitle(target.value)}
-        />
-      </div>
-      <div>
-        author
-        <input
-          type="text"
-          value={author}
-          name="Author"
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-      </div>
-      <div>
-        url
-        <input
-          type="text"
-          value={url}
-          name="Author"
-          onChange={({ target }) => setUrl(target.value)}
-        />
-      </div>
-      <button type="submit">create</button>
-    </form>
+    <>
+      <Notification message={message} />
+      <form onSubmit={handleBlog}>
+        <div>
+          <h2>Create new blog</h2>
+          title
+          <input
+            type="text"
+            value={title}
+            name="Title"
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </div>
+        <div>
+          author
+          <input
+            type="text"
+            value={author}
+            name="Author"
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </div>
+        <div>
+          url
+          <input
+            type="text"
+            value={url}
+            name="Author"
+            onChange={({ target }) => setUrl(target.value)}
+          />
+        </div>
+        <button type="submit">create</button>
+      </form>
+    </>
   );
 
   return (
     <>
       {user === null ?
-        loginForm()
+        <div>{LoginForm()}</div>
         :
         <>
           <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
           <div>{BlogForm()}</div>
           <h2>blogs</h2>
-          <Notification message={message} />
+
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
           ))}
