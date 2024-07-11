@@ -32,9 +32,12 @@ const update = (id: number, newObject: IPerson): Promise<IPerson> => {
   return request.then((response: AxiosResponse<IPerson>) => response.data);
 };
 const remove = (id: number): Promise<IPerson> => {
-  const request = axios.delete<IPerson>(`${baseUrl}/${id}`);
+  const config = {
+    headers: { Authorization: token },
+  }
+  const request = axios.delete<IPerson>(`${baseUrl}/${id}`,config);
   return request.then((response: AxiosResponse<IPerson>) => response.data);
 };
 
 
-export default { getAll, create, update, setToken }
+export default { getAll, create, update, remove, setToken }
