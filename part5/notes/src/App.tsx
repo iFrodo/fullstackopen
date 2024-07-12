@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { useState, useEffect, useRef, ChangeEvent, FormEvent } from "react";
 import { Note } from "./components/Note";
 import notesService, { IPerson } from './services/Notes';
 import loginService from './services/Login';
@@ -23,6 +23,7 @@ const App = () => {
   const [error, setErrorMessage] = useState('')
   const [loginVisible, setLoginVisible] = useState(false)
 
+  const noteFormRef = useRef();
 
   useEffect(() => {
     console.log('effect');
@@ -48,6 +49,7 @@ const App = () => {
 
 
   const addNote = (noteObject) => {
+    noteFormRef.current.toggleVisibility()
     notesService
       .create(noteObject)
       .then((returnedNote: any) => {
@@ -111,7 +113,9 @@ const App = () => {
         <div>
           <h2 >Notes</h2>
           <p>{user.login} logged-in <button onClick={() => { localStorage.clear(), setUser(null) }}>logout</button></p>
-          <NoteForm createNote={addNote} />
+          <Togglable buttonLabel='new note' ref={noteFormRef}>
+            <NoteForm createNote={addNote} />
+          </Togglable>
           <ul>
             {notesToShow.map((note) =>
               <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)} onDeleteClickBtn={() => onDeleteClickBtn(note.id)} />

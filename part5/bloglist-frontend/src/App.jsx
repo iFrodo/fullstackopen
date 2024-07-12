@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect,useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogService'
 import loginService from './services/loginService'
+import Togglable from './components/Toggleble'
 
 
 
@@ -16,7 +17,7 @@ const App = () => {
   const [url, setUrl] = useState('');
   const [message, setMessage] = useState(null)
 
-
+  const noteFormRef = useRef();
   useEffect(() => {
     if (user) {
       blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -98,6 +99,7 @@ const App = () => {
 
   const handleBlog = async (e) => {
     e.preventDefault()
+    noteFormRef.current.toggleVisibility()
     const newBlog = {
       title: title,
       author: author,
@@ -181,11 +183,15 @@ const App = () => {
   return (
     <>
       {user === null ?
+       <Togglable buttonLabel='log'>
         <div>{LoginForm()}</div>
+        </Togglable>
         :
         <>
           <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
-          <div>{BlogForm()}</div>
+          <Togglable buttonLabel='create blog' ref={noteFormRef}>
+            <div>{BlogForm()}</div>
+          </Togglable>
           <h2>blogs</h2>
 
           {blogs.map((blog) => (
