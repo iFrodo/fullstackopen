@@ -26,6 +26,13 @@ const App = () => {
     }
   }, [user]);
 
+  // useEffect(() => {
+  //   if (blogs) {
+  //     blogService.getAll().then((blogs) => setBlogs(blogs)) === blogs ? '':blogService.getAll().then((blogs) => setBlogs(blogs));
+  //   }
+  // }, [blogs]);
+
+
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('user')
@@ -100,16 +107,22 @@ const App = () => {
   }
 
   const handleBlog = async (newBlog) => {
-
+    //закрывать форму после отправки
     noteFormRef.current.toggleVisibility()
- 
+
     const response = await blogService.create(newBlog)
+    // notification
     setMessage(1)
     setTimeout(() => {
       setMessage(null)
     }, 3000)
 
     setBlogs(blogs.concat(response))
+  }
+  const deleteHandler = (blog) => {
+    const response = blogService.remove(blog.id).then(() => {
+      setBlogs(blogs.filter(el => el.id !== blog.id));
+    });
   }
 
   const LoginForm = () => (
@@ -145,9 +158,9 @@ const App = () => {
   return (
     <>
       {user === null ?
-      
+
         <Togglable buttonLabel='log'>
-          
+
           <div>{LoginForm()}</div>
         </Togglable>
         :
@@ -155,12 +168,12 @@ const App = () => {
           <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
           <Notification message={message} />
           <Togglable buttonLabel='create blog' ref={noteFormRef}>
-          <BlogForm handleBlog={handleBlog} user={user}/>
+            <BlogForm handleBlog={handleBlog} user={user} />
           </Togglable>
           <h2>blogs</h2>
-` `
+          ` `
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} deleteHandler={deleteHandler} />
           ))}
         </>
       }

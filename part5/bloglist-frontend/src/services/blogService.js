@@ -23,8 +23,18 @@ const create = (newBlog) => {
       Authorization: token,
     },
   };
-  const request = axios.post(baseUrl,newBlog,config)
+  const request = axios.post(baseUrl, newBlog, config)
   return request.then(response => response.data)
 }
+const remove = (blogId) => {
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
+  const request = axios.delete(`${baseUrl}/${blogId}`, config)
+  return request.then(response => response.data)
 
-export default { getAll, create, setToken }
+}
+
+export default { getAll, create, remove, setToken }

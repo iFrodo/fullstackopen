@@ -20,15 +20,17 @@ blogsRouter.post('/', async (request, response, next) => {
     await request.user.save()
     response.status(201).json(savedBlog)
 })
-blogsRouter.delete('/:id', async (request, res, next) => {
+
+blogsRouter.delete('/:id', async (request, response, next) => {
     const blog = await Blog.findById(request.params.id)
     if (request.user.id === blog.user.toString()) {
-        await Blog.findByIdAndDelete(request.params.id)
-        res.status(204).json(blog + ' was succesfully deleted').end()
+        const deletedBlog = await Blog.findByIdAndDelete(request.params.id)
+        response.status(204).json(deletedBlog + ' was succesfully deleted').end()
     } else {
-        res.status(400).end('no permition')
+        response.status(400).end('no permition')
     }
 })
+
 blogsRouter.put('/:id', async (req, res, next) => {
     const { likes } = req.body
     const updatedBlog = await Blog.findByIdAndUpdate(

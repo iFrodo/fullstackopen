@@ -1,8 +1,8 @@
-const Blog = ({ blog }) => (
+const Blog = ({ blog, deleteHandler }) => (
   <div>
     {blog.title} {blog.author}
-    
-  </div>  
+    <button onClick={() => { deleteHandler(blog) }}>delete</button>
+  </div>
 )
 
 export default Blog
