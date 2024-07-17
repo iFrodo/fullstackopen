@@ -172,7 +172,7 @@ const App = () => {
           <h2>blogs</h2>
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} deleteHandler={deleteHandler} deleteBtnText={'delete'}
-              moreBtnText={'more'} hideBtnText={'hide'} likeBtnText={'like!'} />
+              moreBtnText={'more'} hideBtnText={'hide'} likeBtnText={'like!'} user={user} />
           ))}
         </>
       }
