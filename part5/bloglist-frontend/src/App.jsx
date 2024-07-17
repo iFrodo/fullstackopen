@@ -19,7 +19,7 @@ const App = () => {
 
   const [message, setMessage] = useState(null)
 
-  const noteFormRef = useRef();
+  const blogFormRef = useRef();
   useEffect(() => {
     if (user) {
       blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -108,7 +108,7 @@ const App = () => {
 
   const handleBlog = async (newBlog) => {
     //закрывать форму после отправки
-    noteFormRef.current.toggleVisibility()
+    blogFormRef.current.toggleVisibility()
 
     const response = await blogService.create(newBlog)
     // notification
@@ -167,13 +167,13 @@ const App = () => {
         <>
           <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
           <Notification message={message} />
-          <Togglable buttonLabel='create blog' ref={noteFormRef}>
+          <Togglable buttonLabel='create blog' ref={blogFormRef}>
             <BlogForm handleBlog={handleBlog} user={user} />
           </Togglable>
           <h2>blogs</h2>
-          ` `
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} deleteHandler={deleteHandler} />
+            <Blog key={blog.id} blog={blog} deleteHandler={deleteHandler} deleteBtnText={'delete'}
+            moreBtnText={'more'} hideBtnText={'hide'}  />
           ))}
         </>
       }

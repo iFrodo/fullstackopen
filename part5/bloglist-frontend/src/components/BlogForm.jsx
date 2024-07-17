@@ -13,6 +13,9 @@ const BlogForm = ({ handleBlog, user }) => {
             url: url,
             user: user
         })
+        setTitle('')
+        setAuthor('')
+        setUrl('')
     }
 
     return (
