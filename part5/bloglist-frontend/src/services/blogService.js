@@ -37,4 +37,15 @@ const remove = (blogId) => {
 
 }
 
-export default { getAll, create, remove, setToken }
+const change = (blog) => {
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
+  const request = axios.put(`${baseUrl}/${blog.id}`, blog, config)
+  return request.then(response => response.data)
+
+}
+
+export default { getAll, create, remove, change, setToken }

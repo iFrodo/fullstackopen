@@ -1,6 +1,7 @@
 import { useState } from "react"
+import blogService from "../services/blogService"
 
-const Blog = ({ blog, deleteHandler, deleteBtnText, moreBtnText,hideBtnText }) => {
+const Blog = ({ blog, deleteHandler, deleteBtnText, moreBtnText, hideBtnText, likeBtnText}) => {
   const [visible, setVisible] = useState(false)
 
   const hideWhenVisible = { display: visible ? 'none' : '' }
@@ -8,6 +9,13 @@ const Blog = ({ blog, deleteHandler, deleteBtnText, moreBtnText,hideBtnText }) =
 
   const toggleVisibility = () => {
     setVisible(!visible)
+  }
+  const likeBtnHandler = () => {
+    blog.likes += 1
+    blogService.change(blog)
+    console.log(blog)
+
+
   }
 
   const blogStyle = {
@@ -17,19 +25,25 @@ const Blog = ({ blog, deleteHandler, deleteBtnText, moreBtnText,hideBtnText }) =
     borderWidth: 1,
     marginBottom: 5
   }
+
   return (
+
     <div style={blogStyle}>
       {blog.title}
-      <div style={showWhenVisible}>
-        <p> Url: {blog.url}</p>
-        <p> Likes: {blog.likes}</p>
-        <p> Author: {blog.author}</p>
-
-      </div>
-      <button onClick={() => { deleteHandler(blog) }}>{deleteBtnText}</button>
 
       <button style={hideWhenVisible} onClick={() => { toggleVisibility() }}>{moreBtnText}</button>
       <button style={showWhenVisible} onClick={() => { toggleVisibility() }}>{hideBtnText}</button>
+      <button onClick={() => { deleteHandler(blog) }}>{deleteBtnText}</button>
+
+      <div style={showWhenVisible}>
+        <p> Url: {blog.url}</p>
+        <p> Likes: {blog.likes}  <button style={showWhenVisible} onClick={() => { likeBtnHandler() }}>{likeBtnText}</button></p>
+        <p> Author: {blog.author}</p>
+
+      </div>
+
+
+
     </div>
   )
 
