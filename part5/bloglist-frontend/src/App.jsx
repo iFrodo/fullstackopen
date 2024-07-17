@@ -152,8 +152,11 @@ const App = () => {
       </form>
     </>
   );
+  // Сначала скопируй массив блогов, чтобы не изменять оригинальный массив
+  const sortedBlogs = [...blogs];
 
-
+  // Теперь отсортируй блоги по убыванию количества лайков
+  sortedBlogs.sort((a, b) => b.likes - a.likes);
   return (
     <>
       {user === null ?
@@ -170,7 +173,7 @@ const App = () => {
             <BlogForm handleBlog={handleBlog} user={user} />
           </Togglable>
           <h2>blogs</h2>
-          {blogs.map((blog) => (
+          {sortedBlogs.map((blog) => (
             <Blog key={blog.id} blog={blog} deleteHandler={deleteHandler} deleteBtnText={'delete'}
               moreBtnText={'more'} hideBtnText={'hide'} likeBtnText={'like!'} user={user} />
           ))}

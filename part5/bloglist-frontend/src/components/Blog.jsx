@@ -2,6 +2,7 @@ import { useState } from "react"
 import blogService from "../services/blogService"
 
 const Blog = ({ blog, deleteHandler, deleteBtnText, moreBtnText, hideBtnText, likeBtnText, user }) => {
+  const [blogs, setBlogs] = useState([]);
   const [visible, setVisible] = useState(false)
   const hideWhenVisible = { display: visible ? 'none' : '' }
   const showWhenVisible = { display: visible ? '' : 'none' }
@@ -10,9 +11,12 @@ const Blog = ({ blog, deleteHandler, deleteBtnText, moreBtnText, hideBtnText, li
     setVisible(!visible)
   }
   const likeBtnHandler = () => {
-    blog.likes += 1
-    blogService.change(blog)
-  }
+    blog.likes += 1;
+    blogService.change(blog).then(updatedBlog => {
+      // Обновляем состояние блогов
+      setBlogs(prevBlogs => prevBlogs.map(b => (b.id === updatedBlog.id ? updatedBlog : b)));
+    });
+  };
 
   const blogStyle = {
     paddingTop: 10,
@@ -21,6 +25,7 @@ const Blog = ({ blog, deleteHandler, deleteBtnText, moreBtnText, hideBtnText, li
     borderWidth: 1,
     marginBottom: 5
   }
+
 
   return (
 
@@ -44,9 +49,6 @@ const Blog = ({ blog, deleteHandler, deleteBtnText, moreBtnText, hideBtnText, li
       ) : ''}
 
       </div>
-
-
-
     </div>
   )
 
