@@ -4,6 +4,7 @@ import blogService from './services/blogService'
 import loginService from './services/loginService'
 import Togglable from './components/Toggleble'
 import BlogForm from './components/BlogForm'
+import { LoginForm } from './components/LoginForm'
 
 
 
@@ -11,8 +12,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([]);
 
   const [user, setUser] = useState(null);
-  const [login, setLogin] = useState('');
-  const [password, setPassword] = useState('');
+
 
   // const [newBlog, setNewBlog] = useState('');
 
@@ -81,18 +81,13 @@ const App = () => {
     // }
   }
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
+  const handleLogin = async (credentials) => {
     try {
-      const user = await loginService.login({
-        login,
-        password,
-      });
-      blogService.setToken(user.token);
-      window.localStorage.setItem('user', JSON.stringify(user))
-      setUser(user);
-      setLogin('');
-      setPassword('');
+      const response = await loginService.login(credentials)
+      blogService.setToken(response.token);
+      window.localStorage.setItem('user', JSON.stringify(response))
+      setUser(response);
+
     } catch (error) {
       setMessage(2)
       setTimeout(() => {
@@ -125,33 +120,7 @@ const App = () => {
     });
   }
 
-  const LoginForm = () => (
-    <>
 
-      <form onSubmit={handleLogin}>
-        <div>
-          <h2>Log in to application</h2>
-          login
-          <input
-            type="text"
-            value={login}
-            name="Login"
-            onChange={({ target }) => setLogin(target.value)}
-          />
-        </div>
-        <div>
-          password
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </>
-  );
   // Сначала скопируй массив блогов, чтобы не изменять оригинальный массив
   const sortedBlogs = [...blogs];
 
@@ -160,10 +129,8 @@ const App = () => {
   return (
     <>
       {user === null ?
-
         <Togglable buttonLabel='log'>
-
-          <div>{LoginForm()}</div>
+          <LoginForm handleLogin={handleLogin} />
         </Togglable>
         :
         <>

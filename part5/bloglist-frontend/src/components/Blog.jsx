@@ -40,13 +40,13 @@ const Blog = ({ blog, deleteHandler, deleteBtnText, moreBtnText, hideBtnText, li
         <p> Likes: {blog.likes}  <button style={showWhenVisible} onClick={() => { likeBtnHandler() }}>{likeBtnText}</button></p>
         <p> Author: {blog.author}</p>
         {/* Показывать кнопку удаления только юзеру создавшему запись */}
-      {blog.user.login === user.login ? (
-        <button  onClick={() => {
-          if (window.confirm("Вы уверены, что хотите удалить этот блог?")) {
-            deleteHandler(blog);
-          }
-        }}>{deleteBtnText}</button>
-      ) : ''}
+        {blog.user.login === user.login ? (
+          <button onClick={() => {
+            if (window.confirm("Вы уверены, что хотите удалить этот блог?")) {
+              deleteHandler(blog);
+            }
+          }}>{deleteBtnText}</button>
+        ) : ''}
 
       </div>
     </div>
