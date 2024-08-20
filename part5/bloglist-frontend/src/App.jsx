@@ -4,33 +4,33 @@ import blogService from './services/blogService'
 import loginService from './services/loginService'
 import Togglable from './components/Toggleble'
 import BlogForm from './components/BlogForm'
-import { LoginForm } from './components/LoginForm'
+import  LoginForm  from './components/LoginForm'
 
 
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  const [blogs, setBlogs] = useState([])
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null)
 
 
-  // const [newBlog, setNewBlog] = useState('');
+  // const [newBlog, setNewBlog] = useState('')
 
 
   const [message, setMessage] = useState(null)
 
-  const blogFormRef = useRef();
+  const blogFormRef = useRef()
   useEffect(() => {
     if (user) {
-      blogService.getAll().then((blogs) => setBlogs(blogs));
+      blogService.getAll().then((blogs) => setBlogs(blogs))
     }
-  }, [user]);
+  }, [user])
 
   // useEffect(() => {
   //   if (blogs) {
-  //     blogService.getAll().then((blogs) => setBlogs(blogs)) === blogs ? '':blogService.getAll().then((blogs) => setBlogs(blogs));
+  //     blogService.getAll().then((blogs) => setBlogs(blogs)) === blogs ? '':blogService.getAll().then((blogs) => setBlogs(blogs))
   //   }
-  // }, [blogs]);
+  // }, [blogs])
 
 
 
@@ -80,27 +80,25 @@ const App = () => {
     //   </div>)
     // }
   }
-
   const handleLogin = async (credentials) => {
     try {
       const response = await loginService.login(credentials)
-      blogService.setToken(response.token);
+      blogService.setToken(response.token)
       window.localStorage.setItem('user', JSON.stringify(response))
-      setUser(response);
+      setUser(response)
 
     } catch (error) {
       setMessage(2)
       setTimeout(() => {
         setMessage(null)
       }, 3000)
-      console.error('Ошибка при входе:', error.message);
+      console.error('Ошибка при входе:', error.message)
     }
-  };
+  }
   const handleLogout = () => {
     window.localStorage.removeItem('user')
     setUser(null)
   }
-
   const handleBlog = async (newBlog) => {
     //закрывать форму после отправки
     blogFormRef.current.toggleVisibility()
@@ -116,16 +114,16 @@ const App = () => {
   }
   const deleteHandler = (blog) => {
     const response = blogService.remove(blog.id).then(() => {
-      setBlogs(blogs.filter(el => el.id !== blog.id));
-    });
+      setBlogs(blogs.filter(el => el.id !== blog.id))
+    })
   }
 
 
   // Сначала скопируй массив блогов, чтобы не изменять оригинальный массив
-  const sortedBlogs = [...blogs];
+  const sortedBlogs = [...blogs]
 
   // Теперь отсортируй блоги по убыванию количества лайков
-  sortedBlogs.sort((a, b) => b.likes - a.likes);
+  sortedBlogs.sort((a, b) => b.likes - a.likes)
   return (
     <>
       {user === null ?
@@ -147,8 +145,8 @@ const App = () => {
         </>
       }
     </>
-  );
-};
+  )
+}
 
 
 export default App

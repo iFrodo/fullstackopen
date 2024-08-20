@@ -7,6 +7,8 @@ const LoginForm = ({ handleLogin, login, handleLoginChange, password, handlePass
                 type="text"
                 value={login}
                 name="login"
+                placeholder="login"
+                data-testid='login'
                 onChange={handleLoginChange}
             />
         </div>
@@ -16,6 +18,8 @@ const LoginForm = ({ handleLogin, login, handleLoginChange, password, handlePass
                 type="password"
                 value={password}
                 name="Password"
+                placeholder="password"
+                data-testid='password'
                 onChange={handlePasswordChange}
             />
         </div>

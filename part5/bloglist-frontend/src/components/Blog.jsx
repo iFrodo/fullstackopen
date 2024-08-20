@@ -1,7 +1,11 @@
-import { useState } from "react"
-import blogService from "../services/blogService"
+import { useState } from 'react'
+import { PropTypes } from 'prop-types'
+import blogService from '../services/blogService'
 
 const Blog = ({ blog, deleteHandler, deleteBtnText, moreBtnText, hideBtnText, likeBtnText, user }) => {
+  Blog.propTypes = {
+    blog: PropTypes.string.isRequired
+  }
   const [blogs, setBlogs] = useState([]);
   const [visible, setVisible] = useState(false)
   const hideWhenVisible = { display: visible ? 'none' : '' }
@@ -29,7 +33,7 @@ const Blog = ({ blog, deleteHandler, deleteBtnText, moreBtnText, hideBtnText, li
 
   return (
 
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog-title'>
       {blog.title}
 
       <button style={hideWhenVisible} onClick={() => { toggleVisibility() }}>{moreBtnText}</button>
@@ -37,13 +41,13 @@ const Blog = ({ blog, deleteHandler, deleteBtnText, moreBtnText, hideBtnText, li
 
       <div style={showWhenVisible}>
         <p> Url: {blog.url}</p>
-        <p> Likes: {blog.likes}  <button style={showWhenVisible} onClick={() => { likeBtnHandler() }}>{likeBtnText}</button></p>
+        <p> Likes: {blog.likes}  <button style={showWhenVisible} className='like-btn' onClick={() => { likeBtnHandler() }}>{likeBtnText}</button></p>
         <p> Author: {blog.author}</p>
         {/* Показывать кнопку удаления только юзеру создавшему запись */}
         {blog.user.login === user.login ? (
           <button onClick={() => {
-            if (window.confirm("Вы уверены, что хотите удалить этот блог?")) {
-              deleteHandler(blog);
+            if (window.confirm('Вы уверены, что хотите удалить этот блог?')) {
+              deleteHandler(blog);  
             }
           }}>{deleteBtnText}</button>
         ) : ''}
