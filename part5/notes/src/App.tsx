@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent } from "react";
-import  Note  from "./components/Note";
+import Note from "./components/Note";
 import notesService, { IPerson } from './services/Notes';
 import loginService from './services/Login';
 import LoginForm from "./components/LoginForm";
