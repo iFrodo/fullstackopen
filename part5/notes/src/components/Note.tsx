@@ -3,7 +3,7 @@
     return (
         <>
             <li className="note-title">{note.content}
-                <button onClick={toggleImportance}>{label}</button>
+                <button onClick={toggleImportance} data-testid='toggle-importance'>{label}</button>
                 <button onClick={onDeleteClickBtn}>delete</button></li>
 
         </>

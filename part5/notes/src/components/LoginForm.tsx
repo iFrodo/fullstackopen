@@ -1,6 +1,9 @@
-const LoginForm = ({ handleLogin, login, handleLoginChange, password, handlePasswordChange }) => (
+import Notification from "./Notification"
 
-    <form onSubmit={handleLogin}>
+const LoginForm = ({ handleLogin, login, handleLoginChange, password, handlePasswordChange,notification }:any) => (
+<>
+<Notification message={notification}/>
+<form onSubmit={handleLogin}>
         <div>
             login
             <input
@@ -25,5 +28,8 @@ const LoginForm = ({ handleLogin, login, handleLoginChange, password, handlePass
         </div>
         <button type="submit">login</button>
     </form>
+
+</>
+   
 )
 export default LoginForm
