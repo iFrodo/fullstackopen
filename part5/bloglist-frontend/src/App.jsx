@@ -13,7 +13,6 @@ const App = () => {
 
   const [user, setUser] = useState(null)
 
-
   // const [newBlog, setNewBlog] = useState('')
 
 

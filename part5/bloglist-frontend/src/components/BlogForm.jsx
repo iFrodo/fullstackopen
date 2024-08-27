@@ -5,6 +5,7 @@ const BlogForm = ({ handleBlog, user }) => {
     const [author, setAuthor] = useState('');
     const [url, setUrl] = useState('');
 
+
     const addBlog = (e) => {
         e.preventDefault()
         handleBlog({

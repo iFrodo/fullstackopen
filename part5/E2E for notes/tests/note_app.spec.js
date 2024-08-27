@@ -66,9 +66,10 @@ describe('Note App', () => {
         describe('тесты после создания заметки', () => {
             beforeEach(async ({ page }) => {
                 await createNote(page, 'new test note')
+                
             })
 
-            test('можно изменить приоритет заявки', async ({ page }) => {
+            test('можно изменить приоритет заметки', async ({ page }) => {
                 await page.getByTestId('toggle-importance').click()
 
                 await expect(page.getByText('make not important')).toBeVisible()

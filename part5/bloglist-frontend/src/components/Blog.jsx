@@ -6,6 +6,7 @@ const Blog = ({ blog, deleteHandler, deleteBtnText, moreBtnText, hideBtnText, li
   Blog.propTypes = {
     blog: PropTypes.string.isRequired
   }
+ 
   const [blogs, setBlogs] = useState([]);
   const [visible, setVisible] = useState(false)
   const hideWhenVisible = { display: visible ? 'none' : '' }
