@@ -16,7 +16,7 @@ const Blog = ({ blog, deleteHandler, deleteBtnText, moreBtnText, hideBtnText, li
     setVisible(!visible)
   }
   const likeBtnHandler = () => {
-    blog.likes += 1;
+    blog.likes++;
     blogService.change(blog).then(updatedBlog => {
       // Обновляем состояние блогов
       setBlogs(prevBlogs => prevBlogs.map(b => (b.id === updatedBlog.id ? updatedBlog : b)));
@@ -37,16 +37,16 @@ const Blog = ({ blog, deleteHandler, deleteBtnText, moreBtnText, hideBtnText, li
     <div style={blogStyle} className='blog-title'>
       {blog.title}
 
-      <button style={hideWhenVisible} onClick={() => { toggleVisibility() }}>{moreBtnText}</button>
+      <button data-testid='moreBtn' style={hideWhenVisible} onClick={() => { toggleVisibility() }}>{moreBtnText}</button>
       <button style={showWhenVisible} onClick={() => { toggleVisibility() }}>{hideBtnText}</button>
 
       <div style={showWhenVisible}>
         <p> Url: {blog.url}</p>
-        <p> Likes: {blog.likes}  <button style={showWhenVisible} className='like-btn' onClick={() => { likeBtnHandler() }}>{likeBtnText}</button></p>
+        <p > Likes:<span data-testid='likesCount'>{blog.likes} </span> <button  data-testid='likeBtn' style={showWhenVisible} className='like-btn' onClick={() => { likeBtnHandler() }}>{likeBtnText}</button></p>
         <p> Author: {blog.author}</p>
         {/* Показывать кнопку удаления только юзеру создавшему запись */}
         {blog.user.login === user.login ? (
-          <button onClick={() => {
+          <button  data-testid = 'deleteBtn' onClick={() => {
             if (window.confirm('Вы уверены, что хотите удалить этот блог?')) {
               deleteHandler(blog);  
             }

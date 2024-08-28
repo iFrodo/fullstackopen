@@ -31,8 +31,6 @@ const App = () => {
   //   }
   // }, [blogs])
 
-
-
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('user')
     if (loggedUserJSON) {
@@ -53,7 +51,7 @@ const App = () => {
     if (message === 2) {
       return (
         <div className='popup--red'>
-          wrond credentials
+          wrong credentials
         </div>
       )
     }
@@ -127,6 +125,7 @@ const App = () => {
     <>
       {user === null ?
         <Togglable buttonLabel='log'>
+          <Notification message={message}/>
           <LoginForm handleLogin={handleLogin} />
         </Togglable>
         :

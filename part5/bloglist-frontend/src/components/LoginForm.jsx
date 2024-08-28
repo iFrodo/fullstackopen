@@ -29,6 +29,7 @@ const LoginForm = ({ handleLogin }) => {
                         value={login}
                         name="Login"
                         placeholder="login"
+                        data-testid='loginInput'
                         onChange={({ target }) => setLogin(target.value)}
                     />
                 </div>
@@ -39,10 +40,11 @@ const LoginForm = ({ handleLogin }) => {
                         value={password}
                         name="Password"
                            placeholder="password"
+                           data-testid='passwordInput'
                         onChange={({ target }) => setPassword(target.value)}
                     />
                 </div>
-                <button type="submit">login</button>
+                <button data-testid='loginBtn'type="submit">login</button>
             </form>
         </>
     )
