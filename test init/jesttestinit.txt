@@ -1,0 +1,131 @@
+Сначала нам нужно настроить библиотеку тестирования Jest для проекта. Давайте установим следующие зависимости:
+
+npm install --save-dev jest @babel/preset-env @babel/preset-react eslint-plugin-jest
+
+Далее мы создадим файл .babelrc со следующим содержимым:
+
+{
+  "presets": [
+    "@babel/preset-env",
+    ["@babel/preset-react", { "runtime": "automatic" }]
+  ]
+}
+
+Давайте расширим package.json скриптом для запуска тестов:
+
+{
+  // ...
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "test": "jest"
+  },
+  // ...
+}
+
+И, наконец, .eslintrc.cjs необходимо изменить следующим образом:
+
+module.exports = {
+  root: true,
+  env: { 
+    browser: true,
+    es2020: true,
+    "jest/globals": true
+  },
+  // ...
+}
+
+Мы также добавим библиотеку deep-freeze, которую можно использовать для обеспечения правильного определения редуктора как неизменяемой функции. Давайте установим библиотеку как зависимость от разработки.:
+
+npm install --save-dev deep-freeze
+
+Тест, который мы определяем в файле src/reducers/noteReducer.test.js, имеет следующее содержание:
+
+import noteReducer from './noteReducer'
+import deepFreeze from 'deep-freeze'
+
+describe('noteReducer', () => {
+  test('returns new state with action NEW_NOTE', () => {
+    const state = []
+    const action = {
+      type: 'NEW_NOTE',
+      payload: {
+        content: 'the app state is in redux store',
+        important: true,
+        id: 1
+      }
+    }
+
+    deepFreeze(state)
+    const newState = noteReducer(state, action)
+
+    expect(newState).toHaveLength(1)
+    expect(newState).toContainEqual(action.payload)
+  })
+})
+Команда DeepFreeze(state) гарантирует, что reducer не изменит состояние хранилища, заданное ему в качестве параметра. Если редуктор использует команду push для управления состоянием, тест не пройдет
+
+Теперь мы создадим тест для действия TOGGLE_IMPORTANCE:
+
+test('returns new state with action TOGGLE_IMPORTANCE', () => {
+  const state = [
+    {
+      content: 'the app state is in redux store',
+      important: true,
+      id: 1
+    },
+    {
+      content: 'state changes are made with actions',
+      important: false,
+      id: 2
+    }]
+
+  const action = {
+    type: 'TOGGLE_IMPORTANCE',
+    payload: {
+      id: 2
+    }
+  }
+
+  deepFreeze(state)
+  const newState = noteReducer(state, action)
+
+  expect(newState).toHaveLength(2)
+
+  expect(newState).toContainEqual(state[0])
+
+  expect(newState).toContainEqual({
+    content: 'state changes are made with actions',
+    important: true,
+    id: 2
+  })
+})
+
+
+
+
+необходимо изменить важность заметки с идентификатором 2.
+
+Редуктор расширен следующим образом
+
+const noteReducer = (state = [], action) => {
+  switch(action.type) {
+    case 'NEW_NOTE':
+      return state.concat(action.payload)
+    case 'TOGGLE_IMPORTANCE': {
+      const id = action.payload.id
+      const noteToChange = state.find(n => n.id === id)
+      const changedNote = { 
+        ...noteToChange, 
+        important: !noteToChange.important 
+      }
+      return state.map(note =>
+        note.id !== id ? note : changedNote 
+      )
+     }
+    default:
+      return state
+  }
+}
