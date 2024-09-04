@@ -1,4 +1,5 @@
 import noteReducer from './noteReducer'
+//deepFreeze модуль позволяет сделать обьект иммутабельным (не изменяемым)
 import deepFreeze from 'deep-freeze'
 
 describe('noteReducer', () => {
