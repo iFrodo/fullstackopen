@@ -1,10 +1,14 @@
 import Notes from "./components/Notes"
 import NewNoteForm from "./components/NewNoteForm"
+import VisibilityFilter from "./components/VisibilitiFilter"
+
 
 const App = () => {
-  return(
+
+  return (
     <div>
       <NewNoteForm />
+      <VisibilityFilter />
       <Notes />
     </div>
   )
