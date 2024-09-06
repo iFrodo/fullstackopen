@@ -6,8 +6,9 @@ import Note from './Note'
 
 const Notes = () => {
     const dispatch = useDispatch()
-    const notes = useSelector(({ filter, notes }) => {
+    const notes = useSelector(({ notes, filter }) => {
         if ( filter === 'ALL' ) {
+            console.log(notes.notes)
           return notes
         }
         return filter  === 'IMPORTANT' 
@@ -25,6 +26,7 @@ const Notes = () => {
                         dispatch(toggleImportanceOf(note.id))
                     }
                 />
+              
             )}
         </ul>
     )

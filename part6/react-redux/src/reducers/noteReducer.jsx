@@ -1,15 +1,18 @@
-import { createSlice } from '@reduxjs/toolkit'
-
+import { createSlice, current } from '@reduxjs/toolkit'
 
 const initialState = [
   {
-    notes: [
-      { content: 'reducer defines how redux store works', important: true, id: 1 },
-      { content: 'state of store can contain any data', important: false, id: 2 }
-    ],
-    filter: 'IMPORTANT'
-  }
+    content: 'reducer defines how redux store works',
+    important: true,
+    id: 1,
+  },
+  {
+    content: 'state of store can contain any data',
+    important: false,
+    id: 2,
+  },
 ]
+
 
 const generateId = () =>
   Number((Math.random() * 1000000).toFixed(0))
@@ -27,8 +30,10 @@ const noteSlice = createSlice({
         important: false,
         id: generateId(),
       })
+      console.log(current(state))
     },
     toggleImportanceOf(state, action) {
+      console.log(state)
       const id = action.payload
       const noteToChange = state.find(n => n.id === id)
       const changedNote = { 
