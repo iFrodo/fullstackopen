@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux"
-import { setFilter } from "../reducers/store"
+import { setFilter } from "../reducers/filterReducer"
 
 const FilterForm = () => {
     const dispatch = useDispatch()

@@ -1,7 +1,7 @@
 // components/Anecdotes.js
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { voteFor } from '../reducers/store'
+import { voteFor } from '../reducers/anecdoteReducer'
 const Anecdotes = () => {
     const anecdotes = useSelector(state => state.anecdotes);
     const filter = useSelector(state => state.filter);
