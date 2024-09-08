@@ -3,9 +3,9 @@ import { combineReducers } from 'redux';
 import anecdoteReducer from './anecdoteReducer';
 import filterReducer from './filterReducer';
 
-const rootReducer = combineReducers({
+const reducer = combineReducers({
     anecdotes: anecdoteReducer,
     filter: filterReducer,
 });
 
-export default rootReducer;
+export default reducer;

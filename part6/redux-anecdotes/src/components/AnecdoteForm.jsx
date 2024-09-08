@@ -1,4 +1,4 @@
-import { addNewAnecdote } from "../reducers/anecdoteReducer"
+import { addNewAnecdote } from "../reducers/store"
 import { useDispatch } from "react-redux"
 
 const AnecdoteForm = () => {
