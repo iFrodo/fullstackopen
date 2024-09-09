@@ -15,6 +15,9 @@ const filterSlice = createSlice({
   })
 
 
+
+export const { setFilter } = filterSlice.actions
+export default filterSlice.reducer;
 // const filterReducer = (state = '', action) => {
 //     switch (action.type) {
 //         case 'SET_FILTER':
@@ -30,5 +33,3 @@ const filterSlice = createSlice({
 //         payload: filter,
 //     };
 // };
-export const { setFilter } = filterSlice.actions
-export default filterSlice.reducer;
