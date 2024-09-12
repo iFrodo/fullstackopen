@@ -1,31 +1,30 @@
 // components/Anecdotes.js
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { voteFor } from '../reducers/anecdoteReducer'
-import { notify, removeNotify } from '../reducers/notificationReducer'
+import { setNotify, removeNotify } from '../reducers/notificationReducer'
 import Notification from './Notification';
-import anecdoteService from '../services/anecdoteService';
+import { voteForAnecdote } from '../reducers/anecdoteReducer';
 
 const Anecdotes = () => {
     const anecdotes = useSelector(state => state.anecdotes);
     const filter = useSelector(state => state.filter);
     const dispatch = useDispatch();
 
+
     const filteredAnecdotes = anecdotes.filter(anecdote =>
         anecdote.content.toLowerCase().includes(filter.toLowerCase())
     );
 
     const vote = (id) => {
-        const foundedAnecdote = anecdotes.find(anecdote=>{return anecdote.id === id})
-        dispatch(notify(foundedAnecdote))
-        anecdoteService.vote(foundedAnecdote)
-        dispatch(voteFor(id));
+        const foundedAnecdote = anecdotes.find(anecdote => { return anecdote.id === id })
+        dispatch(setNotify(foundedAnecdote))
+        dispatch(voteForAnecdote(foundedAnecdote));
     };
 
     return (
         <>
             <h2>Anecdotes</h2>
-            <Notification/>
+            <Notification />
             {filteredAnecdotes.sort((a, b) => b.votes - a.votes).map(anecdote =>
                 <div key={anecdote.id}>
                     <div>

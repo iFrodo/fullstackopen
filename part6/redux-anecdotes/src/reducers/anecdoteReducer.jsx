@@ -1,5 +1,6 @@
 
 import { createSlice, current } from '@reduxjs/toolkit'
+import anecdoteService from '../services/anecdoteService'
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -45,17 +46,11 @@ const anecdoteSlice = createSlice({
   initialState: [],
   reducers: {
     voteFor(state, action) {
-      let id = action.payload
-      let anecdoteToFind = state.find(anecdote => anecdote.id === id)
-      let changedAnecdote = {
-        ...anecdoteToFind,
-        votes: anecdoteToFind.votes + 1
-      }
-      return state.map(anecdote => anecdote.id !== id ? anecdote : changedAnecdote)
+      let id = action.payload.id
+      return state.map(anecdote => anecdote.id !== id ? anecdote : action.payload)
     },
-    addNewAnecdote(state, action) {
-      let newAnecdote = asObject(action.payload)
-      return state.concat(newAnecdote)
+    appendAnecdote(state, action) {
+      return state.concat(action.payload)
     },
     setAnecdotes(state, action) {
       return action.payload
@@ -63,7 +58,26 @@ const anecdoteSlice = createSlice({
   }
 
 })
+export const initializeAnecdotes = () => {
+  return async (dispatch) => {
+    const anecdotes = await anecdoteService.getAll()
+    console.log(anecdoteService)
+    dispatch(setAnecdotes(anecdotes))
+  }
+}
+export const addNewAnecdote = (content) => {
+  return async (dispatch) => {
+    const newAnecdote = await anecdoteService.createOne(content)
+    dispatch(appendAnecdote(newAnecdote))
+  }
+}
 
+export const voteForAnecdote = (content) => {
+  return async (dispatch) => {
+    const newAnecdote = await anecdoteService.vote(content)
+    dispatch(voteFor(newAnecdote))
+  }
+}
 
 // export const voteFor = (id) => {
 //   return (
@@ -85,5 +99,5 @@ const anecdoteSlice = createSlice({
 //     }
 //   )
 // }
-export const { voteFor, addNewAnecdote,setAnecdotes } = anecdoteSlice.actions
+export const { voteFor, setAnecdotes, appendAnecdote } = anecdoteSlice.actions
 export default anecdoteSlice.reducer

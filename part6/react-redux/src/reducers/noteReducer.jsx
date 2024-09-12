@@ -22,12 +22,8 @@ const generateId = () =>
 //редюсер получает стейт, получает action, что-то делает , и возвращает измененную копию стейта
 const noteSlice = createSlice({
   name: 'notes',
-  initialState:[],
+  initialState: [],
   reducers: {
-    createNote(state, action) {
-      state.push(action.payload)
-      console.log(current(state))
-    },
     toggleImportanceOf(state, action) {
       console.log(state)
       const id = action.payload
@@ -48,5 +44,19 @@ const noteSlice = createSlice({
     }
   }
 })
-export const { createNote, toggleImportanceOf, appendNote, setNotes } = noteSlice.actions
+
+export const initializeNotes = () => {
+  return async (dispatch) => {
+    const notes = await noteService.getAll()
+    dispatch(setNotes(notes))
+  }
+}
+
+export const createNote = (content) => {
+  return async dispatch => {
+    const newNote = await noteService.createNew(content)
+    dispatch(appendNote(newNote))
+  }
+}
+export const { toggleImportanceOf, setNotes } = noteSlice.actions
 export default noteSlice.reducer

@@ -3,22 +3,22 @@
     {
       "content": "the app state is in redux store",
       "important": true,
-      "id": 1
+      "id": "1"
     },
     {
       "content": "state changes are made with actions",
       "important": false,
-      "id": 2
+      "id": "2"
     },
     {
       "id": "4d8b",
       "content": "asd",
-      "important": false
+      "important": true
     },
     {
       "id": "9de9",
       "content": "cxb",
-      "important": false
+      "important": true
     },
     {
       "id": "b09e",
@@ -54,6 +54,32 @@
       "id": "2bf4",
       "content": "fdhfgh3",
       "important": true
+    },
+    {
+      "id": "f4be",
+      "important": true
+    },
+    {
+      "id": "dda9",
+      "important": true
+    },
+    {
+      "id": "7d0c",
+      "important": true
+    },
+    {
+      "id": "cb62",
+      "important": false
+    },
+    {
+      "id": "ab67",
+      "content": "fda",
+      "important": false
+    },
+    {
+      "id": "ebf0",
+      "content": "",
+      "important": false
     }
   ]
 }

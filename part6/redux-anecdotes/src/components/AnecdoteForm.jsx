@@ -6,9 +6,9 @@ const AnecdoteForm = () => {
     const dispatch = useDispatch()
     const addAnecdote = (e) => {
         e.preventDefault()
-        const inputValue = e.target.newAnecdote.value
-        anecdoteService.createOne(inputValue)
+        let inputValue = e.target.newAnecdote.value
         dispatch(addNewAnecdote(inputValue))
+        e.target.newAnecdote.value = ''
     }
     return (
         <>

@@ -1,17 +1,16 @@
 import Notes from "./components/Notes"
 import NewNoteForm from "./components/NewNoteForm"
 import VisibilityFilter from "./components/VisibilitiFilter"
-import noteService from './services/notes'
 import { useEffect } from 'react'
-import { setNotes } from './reducers/noteReducer'
+
 import { useDispatch } from 'react-redux'
+import { initializeNotes } from "./reducers/noteReducer"
 
 const App = () => {
   const dispatch = useDispatch()
   useEffect(() => {
-    noteService
-      .getAll().then(notes => dispatch(setNotes(notes)))
-  }, [])
+ dispatch(initializeNotes())
+  }, [dispatch])
   return (
     <div>
       <NewNoteForm />
