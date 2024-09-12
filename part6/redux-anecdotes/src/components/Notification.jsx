@@ -10,7 +10,7 @@ const Notification = () => {
     if (notification) {
       const timer = setTimeout(() => {
         dispatch(removeNotify())
-      }, 5000)
+      }, 3000)
       return () => clearTimeout(timer)
     }
   }, [notification, dispatch])

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { voteFor } from '../reducers/anecdoteReducer'
 import { notify, removeNotify } from '../reducers/notificationReducer'
 import Notification from './Notification';
+import anecdoteService from '../services/anecdoteService';
 
 const Anecdotes = () => {
     const anecdotes = useSelector(state => state.anecdotes);
@@ -15,7 +16,9 @@ const Anecdotes = () => {
     );
 
     const vote = (id) => {
-        dispatch(notify(anecdotes.find(anecdote=>{return anecdote.id === id})))
+        const foundedAnecdote = anecdotes.find(anecdote=>{return anecdote.id === id})
+        dispatch(notify(foundedAnecdote))
+        anecdoteService.vote(foundedAnecdote)
         dispatch(voteFor(id));
     };
 

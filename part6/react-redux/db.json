@@ -1,0 +1,59 @@
+{
+  "notes": [
+    {
+      "content": "the app state is in redux store",
+      "important": true,
+      "id": 1
+    },
+    {
+      "content": "state changes are made with actions",
+      "important": false,
+      "id": 2
+    },
+    {
+      "id": "4d8b",
+      "content": "asd",
+      "important": false
+    },
+    {
+      "id": "9de9",
+      "content": "cxb",
+      "important": false
+    },
+    {
+      "id": "b09e",
+      "content": "asdasd",
+      "important": false
+    },
+    {
+      "id": "2d6f",
+      "content": "xcvxcv",
+      "important": false
+    },
+    {
+      "id": "6c1f",
+      "content": "cvbnvbn",
+      "important": false
+    },
+    {
+      "id": "b7f2",
+      "content": "asd",
+      "important": false
+    },
+    {
+      "id": "988b",
+      "content": "asd",
+      "important": false
+    },
+    {
+      "id": "065b",
+      "content": "ncvbncb",
+      "important": false
+    },
+    {
+      "id": "2bf4",
+      "content": "fdhfgh3",
+      "important": true
+    }
+  ]
+}
