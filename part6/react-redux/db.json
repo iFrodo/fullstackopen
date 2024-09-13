@@ -2,7 +2,7 @@
   "notes": [
     {
       "content": "the app state is in redux store",
-      "important": true,
+      "important": false,
       "id": "1"
     },
     {
@@ -13,7 +13,7 @@
     {
       "id": "4d8b",
       "content": "asd",
-      "important": true
+      "important": false
     },
     {
       "id": "9de9",
@@ -74,12 +74,124 @@
     {
       "id": "ab67",
       "content": "fda",
-      "important": false
+      "important": true
     },
     {
       "id": "ebf0",
       "content": "",
+      "important": true
+    },
+    {
+      "id": "b3dc",
+      "content": "asd132",
+      "important": true
+    },
+    {
+      "id": "0a3e",
+      "content": "xcvbxc123",
+      "important": true
+    },
+    {
+      "id": "c380",
+      "content": "asd3234332",
+      "important": true
+    },
+    {
+      "id": "86f7",
+      "content": "фыв12",
       "important": false
+    },
+    {
+      "id": "a249",
+      "content": "пукпу",
+      "important": true
+    },
+    {
+      "id": "61ba",
+      "content": "фыв",
+      "important": true
+    },
+    {
+      "id": "1ecf",
+      "content": "123",
+      "important": true
+    },
+    {
+      "id": "8948",
+      "content": "чсми",
+      "important": false
+    },
+    {
+      "id": "d7f6",
+      "content": "фыв",
+      "important": true
+    },
+    {
+      "id": "7fb9",
+      "content": "asd",
+      "important": false
+    },
+    {
+      "id": "a52d",
+      "content": "zxcqwertdf123",
+      "important": true
+    },
+    {
+      "id": "9293",
+      "note": {
+        "content": "the app state is in redux store",
+        "important": true,
+        "id": "1"
+      }
+    },
+    {
+      "id": "433e",
+      "note": {
+        "id": "b7f2",
+        "content": "asd",
+        "important": false
+      },
+      "important": false
+    },
+    {
+      "id": "e295",
+      "note": {
+        "id": "b09e",
+        "content": "asdasd",
+        "important": false
+      }
+    },
+    {
+      "id": "2a66",
+      "note": {
+        "id": "b09e",
+        "content": "asdasd",
+        "important": false
+      }
+    },
+    {
+      "id": "c1b2",
+      "note": {
+        "id": "b09e",
+        "content": "asdasd",
+        "important": false
+      }
+    },
+    {
+      "id": "6dd2",
+      "note": {
+        "id": "b09e",
+        "content": "asdasd",
+        "important": false
+      }
+    },
+    {
+      "id": "37b7",
+      "note": {
+        "id": "b09e",
+        "content": "asdasd",
+        "important": false
+      }
     }
   ]
 }
