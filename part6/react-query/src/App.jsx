@@ -9,11 +9,13 @@ const App = () => {
 
 
   const newNoteMutation = useMutation({
-    mutationFn: noteService.create, onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notes'] })
+    mutationFn: noteService.create,
+    onSuccess: (newNote) => {
+    
+      const notes = queryClient.getQueryData(['notes'])
+      queryClient.setQueryData(['notes'], notes.concat(newNote))
     }
-  }
-  )
+  })
 
   const importanceMutation = useMutation({
     mutationFn: noteService.toggleImportance, onSuccess: () => {
@@ -24,7 +26,8 @@ const App = () => {
 
   const result = useQuery({
     queryKey: ['notes'],
-    queryFn: () => noteService.getAll()
+    queryFn: () => noteService.getAll(),
+    refetchOnWindowFocus: false
   })
   console.log(JSON.parse(JSON.stringify(result)))
 
