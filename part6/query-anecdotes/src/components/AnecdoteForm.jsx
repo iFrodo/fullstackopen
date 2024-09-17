@@ -2,7 +2,7 @@
 
 
 const AnecdoteForm = ({newAnecdoteMutation}) => {
-
+console.log(newAnecdoteMutation)
   const onCreate = (event) => {
     event.preventDefault()
     const anecdote = { content: event.target.anecdote.value, votes: 0 }

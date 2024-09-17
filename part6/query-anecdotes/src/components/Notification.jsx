@@ -1,4 +1,4 @@
-const Notification = () => {
+const Notification = ({notification}) => {
   const style = {
     border: 'solid',
     padding: 10,
@@ -6,11 +6,12 @@ const Notification = () => {
     marginBottom: 5
   }
   
-  if (true) return null
+   if (!notification) return 
 
   return (
     <div style={style}>
-      
+      {console.log(notification)}
+      {notification}
     </div>
   )
 }
