@@ -8,7 +8,15 @@ import {
     useNavigate,
     useMatch
 } from "react-router-dom"
-
+const Notification = ({notification}) =>{
+    if(!notification)
+        return null
+    return(
+        <div>
+            {notification} was created
+        </div>
+    )
+}
 const Menu = () => {
     const padding = {
         paddingRight: 5
@@ -70,6 +78,7 @@ const CreateNew = ({addNew}) => {
     const [content, setContent] = useState('')
     const [author, setAuthor] = useState('')
     const [info, setInfo] = useState('')
+    const [notification, setNotification] = useState('')
 
 
     const handleSubmit = (e) => {
@@ -80,6 +89,8 @@ const CreateNew = ({addNew}) => {
             info,
             votes: 0
         })
+
+        setNotification(content)
         setContent('')
         setAuthor('')
         setInfo('')
@@ -88,6 +99,7 @@ const CreateNew = ({addNew}) => {
     return (
         <div>
             <h2>create a new anecdote</h2>
+            <Notification notification={notification}/>
             <form onSubmit={handleSubmit}>
                 <div>
                     content
@@ -126,7 +138,7 @@ const App = () => {
         }
     ])
 
-    const [notification, setNotification] = useState('')
+
 
     const match = useMatch('/anecdotes/:id')
 
