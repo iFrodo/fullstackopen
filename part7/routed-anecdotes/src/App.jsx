@@ -1,4 +1,5 @@
 import {useState} from 'react'
+import useValue from './hooks/index.js'
 import {
     Routes,
     Route,
@@ -75,27 +76,42 @@ const Footer = () => (
 )
 
 const CreateNew = ({addNew}) => {
-    const [content, setContent] = useState('')
-    const [author, setAuthor] = useState('')
-    const [info, setInfo] = useState('')
+    // const [content, setContent] = useState('')
+    // const [author, setAuthor] = useState('')
+    // const [info, setInfo] = useState('')
+    const content = useValue('text')
+    const author = useValue('text')
+    const info = useValue('text');
     const [notification, setNotification] = useState('')
-
 
     const handleSubmit = (e) => {
         e.preventDefault()
         addNew({
-            content,
-            author,
-            info,
+            content: content.value,
+            author:author.value,
+            info:info.value,
             votes: 0
         })
 
-        setNotification(content)
-        setContent('')
-        setAuthor('')
-        setInfo('')
+        setNotification(content.value)
+
+        content.reset()
+        author.reset()
+        info.reset()
     }
 
+    const handleReset = () => {
+        content.reset()
+        author.reset()
+        info.reset()
+
+        setNotification('')
+    }
+    const getInputProps = (field) => ({
+        type: field.type,
+        value: field.value,
+        onChange: field.onChange
+    });
     return (
         <div>
             <h2>create a new anecdote</h2>
@@ -103,17 +119,18 @@ const CreateNew = ({addNew}) => {
             <form onSubmit={handleSubmit}>
                 <div>
                     content
-                    <input name='content' value={content} onChange={(e) => setContent(e.target.value)}/>
+                    <input name='content' {...getInputProps(content)} />
                 </div>
                 <div>
                     author
-                    <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)}/>
+                    <input name='author' {...getInputProps(author)} />
                 </div>
                 <div>
                     url for more info
-                    <input name='info' value={info} onChange={(e) => setInfo(e.target.value)}/>
+                    <input name='info' {...getInputProps(info)} />
                 </div>
                 <button>create</button>
+                <button onClick={handleReset}>reset</button>
             </form>
         </div>
     )
