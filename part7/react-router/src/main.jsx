@@ -9,7 +9,7 @@ import {
     TableContainer,
     TableRow,
     TextField,
-    Button,
+
     Alert,
     AppBar, Toolbar, IconButton
 } from '@mui/material'
@@ -25,7 +25,33 @@ import {
     useMatch
 } from "react-router-dom"
 
+const Button = styled.button`
+  background: Bisque;
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid Chocolate;
+  border-radius: 3px;
+`
 
+const Input = styled.input`
+  margin: 0.25em;
+`
+const Page = styled.div`
+  padding: 1em;
+  background: papayawhip;
+`
+
+const Navigation = styled.div`
+  background: BurlyWood;
+  padding: 1em;
+`
+
+const Footer = styled.div`
+  background: Chocolate;
+  padding: 1em;
+  margin-top: 1em;
+`
 const Home = () => (
     <div>
         <h2>TKTL notes app</h2>
@@ -157,47 +183,29 @@ const App = () => {
     }
 
     return (
-        <Container>
-            {(message &&
-                <Alert severity="success">
-                    {message}
-                </Alert>
-            )}
-            <div>
-                <AppBar position="static">
-                    <Toolbar>
-                        <Button color="inherit" component={Link} to="/">
-                            home
-                        </Button>
-                        <Button color="inherit" component={Link} to="/notes">
-                            notes
-                        </Button>
-                        <Button color="inherit" component={Link} to="/users">
-                            users
-                        </Button>
-                        {user
-                            ? <em>{user} logged in</em>
-                            : <Button color="inherit" component={Link} to="/login">
-                                login
-                            </Button>
-                        }
-                    </Toolbar>
-                </AppBar>
-            </div>
+        <Page>
+            <Navigation>
+                <Link style={padding} to="/">home</Link>
+                <Link style={padding} to="/notes">notes</Link>
+                <Link style={padding} to="/users">users</Link>
+                {user
+                    ? <em>{user} logged in</em>
+                    : <Link style={padding} to="/login">login</Link>
+                }
+            </Navigation>
 
             <Routes>
-                <Route path="/notes/:id" element={<Note note={note}/>}/>
-                <Route path="/notes" element={<Notes notes={notes}/>}/>
-                <Route path="/users" element={user ? <Users/> : <Navigate replace to="/login"/>}/>
-                <Route path="/login" element={<Login onLogin={login}/>}/>
-                <Route path="/" element={<Home/>}/>
+                <Route path="/notes/:id" element={<Note note={note} />} />
+                <Route path="/notes" element={<Notes notes={notes} />} />
+                <Route path="/users" element={user ? <Users /> : <Navigate replace to="/login" />} />
+                <Route path="/login" element={<Login onLogin={login} />} />
+                <Route path="/" element={<Home />} />
             </Routes>
 
-            <footer>
-                <br/>
-                <em>Note app, Department of Computer Science 2024</em>
-            </footer>
-        </Container>
+            <Footer>
+                <em>Note app, Department of Computer Science 2022</em>
+            </Footer>
+        </Page>
     )
 }
 
