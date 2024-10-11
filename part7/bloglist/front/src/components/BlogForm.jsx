@@ -59,7 +59,7 @@ const BlogForm = ({ handleBlog, user }) => {
                 />
             </Form.Group>
 
-            <Button variant="primary" type="submit" data-testid='createBlogCreateBtn'>
+            <Button variant="primary" type="submit" data-testid='createBlogCreateBtn' style={{ padding: '15px' }}>
                 Create
             </Button>
         </Form>

@@ -2,10 +2,13 @@ import React, {useState} from 'react';
 import {PropTypes} from 'prop-types';
 import blogService from '../services/blogService';
 import {Card, Button, Collapse} from 'react-bootstrap';
+import {likeBlog} from "../reducers/blogReducer.js";
+import {useDispatch} from "react-redux";
 
 const Blog = ({blog, deleteHandler, deleteBtnText, moreBtnText, hideBtnText, likeBtnText, user}) => {
+    const dispatch = useDispatch()
     Blog.propTypes = {
-        blog: PropTypes.string.isRequired,
+        blog: PropTypes.object.isRequired,
     };
 
     const [visible, setVisible] = useState(false);
@@ -15,11 +18,7 @@ const Blog = ({blog, deleteHandler, deleteBtnText, moreBtnText, hideBtnText, lik
     };
 
     const likeBtnHandler = () => {
-        blog.likes++;
-        blogService.change(blog).then(updatedBlog => {
-            // Обновляем состояние блогов
-            setBlogs(prevBlogs => prevBlogs.map(b => (b.id === updatedBlog.id ? updatedBlog : b)));
-        });
+  dispatch(likeBlog(blog))
     };
 
     return (

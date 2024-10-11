@@ -1,7 +1,11 @@
 import { PropTypes } from "prop-types";
 import { useState } from "react";
 import { Form, Button } from 'react-bootstrap';
-
+const formStyle= {
+    margin:'0 auto',
+    width:'250px',
+    height:'250px',
+}
 const LoginForm = ({ handleLogin }) => {
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
@@ -23,6 +27,7 @@ const LoginForm = ({ handleLogin }) => {
     return (
         <Form onSubmit={handleSubmit}>
             <h2>Log in to application</h2>
+            <div style={formStyle}>
             <Form.Group controlId="formBasicLogin">
                 <Form.Label>Login</Form.Label>
                 <Form.Control
@@ -50,6 +55,7 @@ const LoginForm = ({ handleLogin }) => {
             <Button variant="primary" type="submit" data-testid='loginBtn'>
                 Login
             </Button>
+            </div>
         </Form>
     );
 };
