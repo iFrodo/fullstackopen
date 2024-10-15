@@ -1,9 +1,32 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {PropTypes} from 'prop-types';
-import blogService from '../services/blogService';
+
 import {Card, Button, Collapse} from 'react-bootstrap';
 import {likeBlog} from "../reducers/blogReducer.js";
 import {useDispatch} from "react-redux";
+import {Link, Route, useParams} from "react-router-dom";
+
+export const BlogInfo = ({blogs}) =>{
+    const { id } = useParams(); // Деструктуризация для получения id
+
+
+
+    const blog = blogs.find(el => el.id === id);
+
+
+    if (!blog) {
+        return <div>Blog not found</div>;
+    }
+
+    return (
+        <>
+            <h2>Название: {blog.title}</h2>
+            <p>Автор: {blog.author}</p>
+            <p>URI: {blog.url}</p>
+            <p>Likes: {blog.likes}</p>
+        </>
+    );
+}
 
 const Blog = ({blog, deleteHandler, deleteBtnText, moreBtnText, hideBtnText, likeBtnText, user}) => {
     const dispatch = useDispatch()
@@ -24,7 +47,7 @@ const Blog = ({blog, deleteHandler, deleteBtnText, moreBtnText, hideBtnText, lik
     return (
         <Card className='mb-3'>
             <Card.Body>
-                <Card.Title>{blog.title}</Card.Title>
+                <Card.Title><Link to={`/blog/${blog.id}`}>{blog.title}</Link></Card.Title>
                 <Button variant="primary" onClick={toggleVisibility} className='mb-2'>
                     {visible ? hideBtnText : moreBtnText}
                 </Button>
@@ -51,6 +74,7 @@ const Blog = ({blog, deleteHandler, deleteBtnText, moreBtnText, hideBtnText, lik
                             </Button>
                         )}
                     </div>
+
                 </Collapse>
             </Card.Body>
         </Card>

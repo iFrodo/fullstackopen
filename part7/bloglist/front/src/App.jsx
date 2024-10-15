@@ -1,14 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
-import Blog from './components/Blog';
+import {  useEffect, useRef } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Blog, {BlogInfo} from './components/Blog';
 import Togglable from './components/Toggleble';
 import BlogForm from './components/BlogForm';
 import LoginForm from './components/LoginForm';
 import Info from "./components/Info.jsx";
+import {UserBlog} from "./components/Info.jsx";
 import { useSelector, useDispatch } from 'react-redux';
 import { initializeUser, loginUser, removeUser } from './reducers/userReducer';
 import { initializeBlogs, createBlog, removeBlog } from './reducers/blogReducer';
 import { showNotification } from "./reducers/notificationReducer.js";
-import { Table, Form, Button, Alert, Navbar, Nav } from 'react-bootstrap';
+import { Table,  Button, Alert, Navbar } from 'react-bootstrap';
+
 
 const App = () => {
     const dispatch = useDispatch();
@@ -21,7 +24,7 @@ const App = () => {
         if (user) {
             dispatch(initializeBlogs());
         }
-    }, [user, dispatch,blogs]);
+    }, [user, dispatch]);
 
     useEffect(() => {
         dispatch(initializeUser());
@@ -85,9 +88,9 @@ const App = () => {
     const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes);
 
     return (
-        <>
+        <Router>
             <Navbar bg="light" expand="lg">
-                <Navbar.Brand href="#home">Blog App</Navbar.Brand>
+                <Navbar.Brand href="/">Blog App</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     {user && (
@@ -98,41 +101,51 @@ const App = () => {
                 </Navbar.Collapse>
             </Navbar>
 
-            {user === null ? (
-                <Togglable buttonLabel='log'>
-                    <Notification message={notification?.message} type={notification?.type} />
-                    <LoginForm handleLogin={handleLogin} />
-                </Togglable>
-            ) : (
-                <>
-                    <Info/>
-                    <Notification message={notification?.message} type={notification?.type} />
-                    <Togglable buttonLabel='create blog' ref={blogFormRef}>
-                        <BlogForm handleBlog={handleBlog} user={user} />
-                    </Togglable>
-                    <h2>Blogs</h2>
-                    <Table striped bordered hover>
-                        <tbody>
-                        {sortedBlogs.map((blog) => (
-                            <tr key={blog.id}>
-                                <td>
-                                    <Blog
-                                        blog={blog}
-                                        deleteHandler={deleteHandler}
-                                        deleteBtnText={'delete'}
-                                        moreBtnText={'more'}
-                                        hideBtnText={'hide'}
-                                        likeBtnText={'like!'}
-                                        user={user}
-                                    />
-                                </td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </Table>
-                </>
-            )}
-        </>
+            <Routes>
+                <Route path="/" element={
+                    user === null ? (
+                        <Togglable buttonLabel='log'>
+                            <Notification message={notification?.message} type={notification?.type} />
+                            <LoginForm handleLogin={handleLogin} />
+                        </Togglable>
+                    ) : (
+                        <>
+                            <Info />
+                            <Notification message={notification?.message} type={notification?.type} />
+                            <Togglable buttonLabel='create blog' ref={blogFormRef}>
+                                <BlogForm handleBlog={handleBlog} user={user} />
+                            </Togglable>
+                            <h2>Blogs</h2>
+                            <Table striped bordered hover>
+
+                                <tbody>
+
+                                {sortedBlogs.map((blog) => (
+                                    <tr key={blog.id}>
+                                        <td>
+                                            <Blog
+                                                blog={blog}
+                                                deleteHandler={deleteHandler}
+                                                deleteBtnText={'delete'}
+                                                moreBtnText={'more'}
+                                                hideBtnText={'hide'}
+                                                likeBtnText={'like!'}
+                                                user={user}
+                                            />
+                                        </td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </Table>
+                        </>
+                    )
+                } />
+                <Route path="/blogs/:author" element={<UserBlog />} />
+                <Route path="/blogs/:id" element={<UserBlog />} />
+                <Route path="/blog/:id" element={<BlogInfo blogs={blogs}/>}/>
+
+            </Routes>
+        </Router>
     );
 };
 
