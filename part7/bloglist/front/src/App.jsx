@@ -83,6 +83,7 @@ const App = () => {
             };
             await dispatch(createBlog(blogWithUser));
             dispatch(showNotification('Blog was created', 1));
+            dispatch(initializeBlogs());
         } catch (error) {
             dispatch(showNotification('Failed to create blog', 2));
             console.error('Ошибка при создании блога:', error.message);
@@ -91,6 +92,7 @@ const App = () => {
 
     const deleteHandler = (blog) => {
         dispatch(removeBlog(blog));
+        dispatch(initializeBlogs());
         dispatch(showNotification(`${blog.title} was deleted`, 3));
     };
 

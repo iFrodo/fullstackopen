@@ -1,9 +1,9 @@
 import {PropTypes} from 'prop-types';
 import {Card, Button} from 'react-bootstrap';
-import {initializeBlogs, likeBlog} from "../reducers/blogReducer.js";
+import {likeBlog} from "../reducers/blogReducer.js";
 import {useDispatch} from "react-redux";
 import {Link,  useNavigate, useParams} from "react-router-dom";
-import {useEffect} from "react";
+
 
 
 export const BlogInfo = ({blogs,user,deleteHandler}) =>{
@@ -14,7 +14,7 @@ export const BlogInfo = ({blogs,user,deleteHandler}) =>{
         deleteHandler:PropTypes.func.isRequired
     };
 
-    const { id } = useParams(); // Деструктуризация для получения id
+    const { id } = useParams();
 
     const blog = blogs.find(el => el.id === id);
     const likeBtnHandler = () => {
