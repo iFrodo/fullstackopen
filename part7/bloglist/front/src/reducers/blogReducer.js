@@ -14,7 +14,7 @@ const blogsSlice = createSlice({
         },
         deleteBlog(state, action) {
 
-            return state.filter(el => el.id !== action.payload.id)
+            return state.filter(blog => blog.id !== action.data.id);
         },
         updateBlogLikes(state, action) {
             const { id, likes } = action.payload;

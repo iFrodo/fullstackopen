@@ -15,6 +15,7 @@ const BlogForm = ({ handleBlog, user }) => {
             likes: 0,
             user: user,
         });
+
         setTitle('');
         setAuthor('');
         setUrl('');

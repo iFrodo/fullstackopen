@@ -11,6 +11,7 @@ import { initializeUser, loginUser, removeUser } from './reducers/userReducer';
 import { initializeBlogs, createBlog, removeBlog } from './reducers/blogReducer';
 import { showNotification } from "./reducers/notificationReducer.js";
 import { Table,  Button, Alert, Navbar } from 'react-bootstrap';
+import BlogLink from "./components/Blog";
 
 
 const App = () => {
@@ -72,7 +73,15 @@ const App = () => {
     const handleBlog = async (newBlog) => {
         blogFormRef.current.toggleVisibility();
         try {
-            await dispatch(createBlog(newBlog));
+            const blogWithUser = {
+                ...newBlog,
+                user: {
+                    login: user.login,
+                    name: user.name,
+                    id: user.id
+                }
+            };
+            await dispatch(createBlog(blogWithUser));
             dispatch(showNotification('Blog was created', 1));
         } catch (error) {
             dispatch(showNotification('Failed to create blog', 2));
@@ -123,14 +132,8 @@ const App = () => {
                                 {sortedBlogs.map((blog) => (
                                     <tr key={blog.id}>
                                         <td>
-                                            <Blog
+                                            <BlogLink
                                                 blog={blog}
-                                                deleteHandler={deleteHandler}
-                                                deleteBtnText={'delete'}
-                                                moreBtnText={'more'}
-                                                hideBtnText={'hide'}
-                                                likeBtnText={'like!'}
-                                                user={user}
                                             />
                                         </td>
                                     </tr>
@@ -142,7 +145,7 @@ const App = () => {
                 } />
                 <Route path="/blogs/:author" element={<UserBlog />} />
                 <Route path="/blogs/:id" element={<UserBlog />} />
-                <Route path="/blog/:id" element={<BlogInfo blogs={blogs}/>}/>
+                <Route path="/blog/:id" element={<BlogInfo blogs={blogs} user={user}  deleteHandler={deleteHandler}/> }/>
 
             </Routes>
         </Router>
