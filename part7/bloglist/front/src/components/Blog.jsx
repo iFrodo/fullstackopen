@@ -3,6 +3,7 @@ import {Card, Button} from 'react-bootstrap';
 import {likeBlog} from "../reducers/blogReducer.js";
 import {useDispatch} from "react-redux";
 import {Link,  useNavigate, useParams} from "react-router-dom";
+import Comments from "./Comments.jsx";
 
 
 
@@ -17,6 +18,7 @@ export const BlogInfo = ({blogs,user,deleteHandler}) =>{
     const { id } = useParams();
 
     const blog = blogs.find(el => el.id === id);
+    console.log(blog.id)
     const likeBtnHandler = () => {
         dispatch(likeBlog(blog))
     };
@@ -56,6 +58,7 @@ export const BlogInfo = ({blogs,user,deleteHandler}) =>{
                         </div>
                 </Card.Body>
             </Card>
+            <Comments blogId={blog.id} />
         </>
     );
 }

@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === 'test') {
 app.use('/api/blogs', middleware.userExtractor, blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
-app.use('/api/blogs/:id/comments', commentsRouter)
+app.use('/api/comments', commentsRouter)
 
 
 app.use(middleware.unknownEndpoint)
