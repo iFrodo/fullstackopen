@@ -10,6 +10,7 @@ const { loginRouter } = require('./controllers/loginRouter')
 
 const { MONGODB_URI } = require('./utils/config')
 const middleware = require('./utils/middleware.js')
+const {commentsRouter} = require("./controllers/commentsRouter");
 
 
 
@@ -29,6 +30,7 @@ if (process.env.NODE_ENV === 'test') {
 app.use('/api/blogs', middleware.userExtractor, blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
+app.use('/api/blogs/:id/comments', commentsRouter)
 
 
 app.use(middleware.unknownEndpoint)

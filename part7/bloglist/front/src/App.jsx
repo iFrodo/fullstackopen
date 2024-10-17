@@ -12,6 +12,7 @@ import { initializeBlogs, createBlog, removeBlog } from './reducers/blogReducer'
 import { showNotification } from "./reducers/notificationReducer.js";
 import { Table,  Button, Alert, Navbar } from 'react-bootstrap';
 import BlogLink from "./components/Blog";
+import AppNavbar from "./components/Navbar.jsx";
 
 
 const App = () => {
@@ -89,7 +90,7 @@ const App = () => {
             console.error('Ошибка при создании блога:', error.message);
         }
     };
-
+console.log('render')
     const deleteHandler = (blog) => {
         dispatch(removeBlog(blog));
         dispatch(initializeBlogs());
@@ -100,17 +101,7 @@ const App = () => {
 
     return (
         <Router>
-            <Navbar bg="light" expand="lg">
-                <Navbar.Brand href="/">Blog App</Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    {user && (
-                        <Navbar.Text>
-                            Signed in as: {user.name} <Button variant="outline-secondary" onClick={handleLogout}>Logout</Button>
-                        </Navbar.Text>
-                    )}
-                </Navbar.Collapse>
-            </Navbar>
+            <AppNavbar user={user} handleLogout={handleLogout}/>
 
             <Routes>
                 <Route path="/" element={
@@ -148,6 +139,16 @@ const App = () => {
                 <Route path="/blogs/:author" element={<UserBlog />} />
                 <Route path="/blogs/:id" element={<UserBlog />} />
                 <Route path="/blog/:id" element={<BlogInfo blogs={blogs} user={user}  deleteHandler={deleteHandler}/> }/>
+                <Route path="/users/" element={<Info/> }/>
+                <Route path="/blogs/" element=  {sortedBlogs.map((blog) => (
+                    <tr key={blog.id}>
+                        <td>
+                            <BlogLink
+                                blog={blog}
+                            />
+                        </td>
+                    </tr>
+                ))}/>
 
             </Routes>
         </Router>
