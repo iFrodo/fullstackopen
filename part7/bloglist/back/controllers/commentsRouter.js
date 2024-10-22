@@ -12,7 +12,7 @@ commentsRouter.post('/', async (req, res) => {
 });
 
 // Получение комментариев для конкретной записи
-commentsRouter.get('/post/:blogId', async (req, res) => {
+commentsRouter.get('/comments/:blogId', async (req, res) => {
     const comments = await Comment.find({ postId: req.params.blogtId });
     res.json(comments);
 });

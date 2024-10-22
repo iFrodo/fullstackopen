@@ -11,7 +11,7 @@ console.log(blogId)
     useEffect(() => {
         const fetchComments = async () => {
             try {
-                const response = await axios.get(`/api/comments/post/${blogId}`);
+                const response = await axios.get(`/api/comments/comments/${blogId}`);
                 setComments(response.data);
             } catch (err) {
                 setError(err.message);
