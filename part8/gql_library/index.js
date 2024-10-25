@@ -4,7 +4,7 @@ const {graphqlHTTP} = require('express-graphql');
 const express = require('express');
 const {v1: uuid} = require('uuid');
 const cors = require('cors');
-const {GraphQLError} = require('graphql')
+const { GraphQLError } = require('graphql')
 let authors = [{
     name: 'Robert Martin', id: "afa51ab0-344d-11e9-a414-719c6709cf3e", born: 1952,
 }, {
@@ -102,6 +102,18 @@ type Query {
     showAuthors:[Author!]!
     showBooks(author:String,genre:String):[Book!]!
 }
+type Mutation{
+addBook(
+  title:String!
+  published:Int!
+  author:String!
+  genres:[String!]!
+):Book
+editAuthorBorn(
+name:String!
+born:Int!
+):Author
+}
 `
 
 const resolvers = {
@@ -123,6 +135,35 @@ const resolvers = {
                 return books.filter(book=>book.genres.includes(args.genre))
             }
             return books
+        }
+    },
+    Mutation: {
+        addBook:(root,args)=>{
+            if (books.find(book => book.title === args.title)) {
+                throw new GraphQLError('Name must be unique', {
+                    extensions: {
+                        code: 'BAD_USER_INPUT',
+                        invalidArgs: args.title
+                    }
+                })
+            }
+            const existingAuthor = authors.find(author=>author.name === args.author)
+            if(!existingAuthor){
+                const author = {name:args.author,id:uuid(),born:null}
+                authors.push(author)
+            }
+            const book = {...args,id:uuid()}
+            books.push(book)
+            return book
+        },
+        editAuthorBorn:(root,args)=>{
+            const authorToEdit = authors.find(author=>author.name === args.name)
+            if(!authorToEdit){
+                return null
+            }
+            const editedAuthor = {...authorToEdit,born:args.born}
+            authors = authors.map(author=> author.name === args.name ? editedAuthor:author)
+            return editedAuthor
         }
     }
 }
