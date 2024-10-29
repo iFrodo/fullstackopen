@@ -15,7 +15,9 @@ const FIND_PERSON = gql`
     }
 `
 
+
 const Person = ({ person, onClose }) => {
+    console.log(person)
     return (
         <div>
             <h2>{person.name}</h2>
