@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {useMutation} from "@apollo/client";
-import {CREATE_PERSON} from "./queries/queries.jsx";
+import {CREATE_PERSON,ALL_PERSONS} from "./queries/queries.jsx";
 
 
 
@@ -37,7 +37,7 @@ const PersonForm = () => {
         onChange: field.onChange
     });
 
-    const [createPerson] = useMutation(CREATE_PERSON)
+    const [createPerson] = useMutation(CREATE_PERSON,{refetchQueries: [ { query: ALL_PERSONS } ]})
     const submit = (e) => {
         e.preventDefault()
         console.log('submit')
