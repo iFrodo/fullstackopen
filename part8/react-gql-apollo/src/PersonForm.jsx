@@ -1,18 +1,16 @@
 import {useState} from "react";
 import {useMutation} from "@apollo/client";
-import {CREATE_PERSON,ALL_PERSONS} from "./queries/queries.jsx";
+import {CREATE_PERSON, ALL_PERSONS} from "./queries/queries.jsx";
 
 
-
-
-const PersonForm = () => {
+const PersonForm = ({setNotify}) => {
     const useField = (type) => {
         const [value, setValue] = useState('')
 
         const onChange = (event) => {
             setValue(event.target.value)
         }
-        const reset = () =>{
+        const reset = () => {
             setValue('')
         }
         return {
@@ -37,11 +35,16 @@ const PersonForm = () => {
         onChange: field.onChange
     });
 
-    const [createPerson] = useMutation(CREATE_PERSON,{refetchQueries: [ { query: ALL_PERSONS } ]})
+    const [createPerson] = useMutation(CREATE_PERSON, {
+        refetchQueries: [{query: ALL_PERSONS}], onError: (error) => {
+            const messages = error.graphQLErrors.map(e => e.message).join('\n')
+            setNotify(messages)
+        }
+    })
     const submit = (e) => {
         e.preventDefault()
         console.log('submit')
-        createPerson({variables: {name:name.value,street:street.value,city:city.value, phone:phone.value}})
+        createPerson({variables: {name: name.value, street: street.value, city: city.value, phone: phone.value}})
         name.reset()
         phone.reset()
         street.reset()
