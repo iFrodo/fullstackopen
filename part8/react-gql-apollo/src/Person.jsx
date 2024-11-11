@@ -4,7 +4,6 @@ import {FIND_PERSON} from "./queries/queries.jsx";
 
 
 const Person = ({ person, onClose }) => {
-    console.log(person)
     return (
         <div>
             <h2>{person.name}</h2>
@@ -46,7 +45,6 @@ const Persons = ({ persons }) => {
             {persons.map((p) => (
                 <div key={p.name}>
                     {p.name} {p.phone}
-
                     <button onClick={() => setNameToSearch(p.name)}>
                         show address
                     </button>

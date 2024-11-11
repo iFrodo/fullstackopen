@@ -1,12 +1,11 @@
 import {useState} from "react";
 import {useMutation} from "@apollo/client";
-import {CREATE_PERSON, ALL_PERSONS} from "./queries/queries.jsx";
+import {CREATE_PERSON, ALL_PERSONS, EDIT_NUMBER} from "./queries/queries.jsx";
 
 
 const PersonForm = ({setNotify}) => {
     const useField = (type) => {
         const [value, setValue] = useState('')
-
         const onChange = (event) => {
             setValue(event.target.value)
         }
@@ -41,6 +40,8 @@ const PersonForm = ({setNotify}) => {
             setNotify(messages)
         }
     })
+    const [changePhone] = useMutation(EDIT_NUMBER)
+
     const submit = (e) => {
         e.preventDefault()
         console.log('submit')
