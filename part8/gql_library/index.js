@@ -86,6 +86,7 @@ const typeDefs = `
 type Author {
     name:String!
     id:ID!
+    booksCount:Int
     born:Int
 }
 
@@ -101,6 +102,8 @@ type Query {
     showAuthorsCount:Int!
     showAuthors:[Author!]!
     showBooks(author:String,genre:String):[Book!]!
+    showCountAuthorsBooks(author:String):Int
+    
 }
 type Mutation{
 addBook(
@@ -125,38 +128,46 @@ const resolvers = {
             return authors.length
         },
         showAuthors: (root) => {
-            return authors
+            return authors.map((author) => {
+                return {
+                    ...author,
+                    booksCount: books.filter((book) => book.author === author.name).length
+                };
+            });
         },
         showBooks: (root, args) => {
             if (args.author) {
                 return books.filter(book => book.author === args.author)
-            }
-            else if(args.genre){
-                return books.filter(book=>book.genres.includes(args.genre))
+            } else if (args.genre) {
+                return books.filter(book => book.genres.includes(args.genre))
             }
             return books
-        }
+        },
+
     },
     Mutation: {
-        addBook:(root,args)=>{
+        addBook: (root, args) => {
+            console.log(args);
             if (books.find(book => book.title === args.title)) {
                 throw new GraphQLError('Name must be unique', {
                     extensions: {
                         code: 'BAD_USER_INPUT',
                         invalidArgs: args.title
                     }
-                })
+                });
             }
-            const existingAuthor = authors.find(author=>author.name === args.author)
-            if(!existingAuthor){
-                const author = {name:args.author,id:uuid(),born:null}
-                authors.push(author)
+            let existingAuthor = authors.find(author => author.name === args.author);
+            if (!existingAuthor) {
+                const author = { name: args.author, id: uuid(), born: null };
+                authors.push(author);
+                existingAuthor = author; // Обновляем ссылку на автора
             }
-            const book = {...args,id:uuid()}
-            books.push(book)
-            return book
+            const book = { ...args, id: uuid(), author: existingAuthor.name };
+            books.push(book);
+            return book;
         },
         editAuthorBorn:(root,args)=>{
+            console.log(args)
             const authorToEdit = authors.find(author=>author.name === args.name)
             if(!authorToEdit){
                 return null

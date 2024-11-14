@@ -1,14 +1,14 @@
-import { useEffect,useState } from 'react'
-import { useMutation } from '@apollo/client'
+import {useEffect, useState} from 'react'
+import {useMutation} from '@apollo/client'
 
-import { EDIT_NUMBER } from './queries/queries.jsx'
+import {EDIT_NUMBER} from './queries/queries.jsx'
 
 const PhoneForm = ({setNotify}) => {
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
 
 
-    const [ changeNumber,result ] = useMutation(EDIT_NUMBER)
+    const [changeNumber, result] = useMutation(EDIT_NUMBER)
 
     useEffect(() => {
         if (result.data && result.data.editNumber === null) {
@@ -18,10 +18,7 @@ const PhoneForm = ({setNotify}) => {
 
     const submit = (event) => {
         event.preventDefault()
-
-
-        changeNumber({ variables: { name, phone } })
-
+            changeNumber({variables: {name, phone}})
         setName('')
         setPhone('')
     }
@@ -34,13 +31,13 @@ const PhoneForm = ({setNotify}) => {
                 <div>
                     name <input
                     value={name}
-                    onChange={({ target }) => setName(target.value)}
+                    onChange={({target}) => setName(target.value)}
                 />
                 </div>
                 <div>
                     phone <input
                     value={phone}
-                    onChange={({ target }) => setPhone(target.value)}
+                    onChange={({target}) => setPhone(target.value)}
                 />
                 </div>
                 <button type='submit'>change number</button>
