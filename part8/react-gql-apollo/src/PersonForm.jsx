@@ -4,14 +4,21 @@ import {CREATE_PERSON, ALL_PERSONS, EDIT_NUMBER} from "./queries/queries.jsx";
 
 
 const PersonForm = ({setNotify}) => {
+
     const useField = (type) => {
         const [value, setValue] = useState('')
+
         const onChange = (event) => {
             setValue(event.target.value)
         }
+
         const reset = () => {
             setValue('')
         }
+
+
+
+
         return {
             type,
             value,
@@ -19,6 +26,8 @@ const PersonForm = ({setNotify}) => {
             onChange
         }
     }
+
+
     // const [name, setName] = useState('')
     // const [phone, setPhone] = useState('')
     // const [street, setStreet] = useState('')
