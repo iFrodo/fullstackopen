@@ -19,6 +19,12 @@ const CREATE_PERSON = gql`
         }
     }
 `
+ const DELETE_PERSON = gql`
+mutation deletePerson($id:String!){
+    deletePerson(id:$id){
+        name
+    }
+}`
 const FIND_PERSON = gql`
     query findPersonByName($nameToSearch: String!) {
         findPerson(name: $nameToSearch) {
@@ -54,4 +60,4 @@ const EDIT_NUMBER = gql`
         }
     }
 `
-export {CREATE_PERSON,FIND_PERSON,ALL_PERSONS,EDIT_NUMBER}
+export {CREATE_PERSON,FIND_PERSON,ALL_PERSONS,EDIT_NUMBER,DELETE_PERSON}

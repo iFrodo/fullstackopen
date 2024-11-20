@@ -57,16 +57,21 @@ enum YesNo {
   }
 
   type Mutation {
+  
     addPerson(
       name: String!
       phone: String
       street: String!
       city: String!
     ): Person
+    
      editNumber(
     name: String!
     phone: String!
   ): Person
+  
+  deletePerson(
+  id:String!):Person
   }
 `;
 
@@ -124,6 +129,11 @@ const resolvers = {
                     }
                 })
             }
+        },
+        deletePerson: async (root,args) => {
+            console.log(args.id)
+            const person = await Person.findByIdAndDelete(args.id)
+            return person
         }
     }
 };

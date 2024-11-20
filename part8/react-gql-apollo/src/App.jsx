@@ -31,7 +31,7 @@ setErrorMessage(message)
         <div>
             <Notify errorMessage={errorMessage}/>
             <PersonForm setNotify={setNotify}/>
-<Persons persons={result.data.allPersons}/>
+<Persons persons={result.data.allPersons} setNotify={setNotify}/>
             <PhoneForm setNotify={setNotify}/>
         </div>
     )
