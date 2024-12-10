@@ -6,6 +6,7 @@ const {v1: uuid} = require('uuid');
 const cors = require('cors');
 const {GraphQLError} = require('graphql')
 const mongoose = require('mongoose')
+const jwt = require('jsonwebtoken')
 mongoose.set('strictQuery', false)
 const Person = require('./Schemas/schema')
 require('dotenv').config()
@@ -35,6 +36,16 @@ let persons = [
 ];
 //схемы
 const typeDefs = `
+type User {
+  username: String!
+  friends: [Person!]!
+  id: ID!
+}
+
+type Token {
+  value: String!
+}
+
   type Address {
     street: String!
     city: String!
@@ -54,6 +65,7 @@ enum YesNo {
     personCount: Int!
     allPersons(phone: YesNo): [Person!]!
     findPerson(name: String!): Person
+     me: User
   }
 
   type Mutation {
@@ -72,7 +84,19 @@ enum YesNo {
   
   deletePerson(
   id:String!):Person
+  
+    
+   createUser(
+    username: String!
+  ): User
+  
+  login(
+    username: String!
+    password: String!
+  ): Token
   }
+
+  
 `;
 
 const resolvers = {
@@ -100,6 +124,38 @@ const resolvers = {
     },
     //резолверы мутаций(добавлений)
     Mutation: {
+        createUser: async (root, args) => {
+            const user = new User({ username: args.username })
+
+            return user.save()
+                .catch(error => {
+                    throw new GraphQLError('Creating the user failed', {
+                        extensions: {
+                            code: 'BAD_USER_INPUT',
+                            invalidArgs: args.username,
+                            error
+                        }
+                    })
+                })
+        },
+        login: async (root, args) => {
+            const user = await User.findOne({ username: args.username })
+
+            if ( !user || args.password !== 'secret' ) {
+                throw new GraphQLError('wrong credentials', {
+                    extensions: {
+                        code: 'BAD_USER_INPUT'
+                    }
+                })
+            }
+
+            const userForToken = {
+                username: user.username,
+                id: user._id,
+            }
+
+            return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
+        },
         addPerson: async (root, args) => {
             const person = new Person({...args})
             try {
@@ -113,7 +169,6 @@ const resolvers = {
                     }
                 })
             }
-
         },
         editNumber: async (root, args) => {
             const person = await Person.findOne({name: args.name})
@@ -132,8 +187,15 @@ const resolvers = {
         },
         deletePerson: async (root,args) => {
             console.log(args.id)
-            const person = await Person.findByIdAndDelete(args.id)
-            return person
+            try{
+                const person = await Person.findByIdAndDelete(args.id)
+                return person
+            }catch (error){
+                throw new GraphQLError('Deleting was failed',{extensions:{
+                    error
+                    }})
+            }
+
         }
     }
 };
@@ -153,6 +215,17 @@ app.use(cors({
 app.use('/graphql', graphqlHTTP({
     schema,
     graphiql: true,
+    context: async ({ req, res }) => {
+        const auth = req ? req.headers.authorization : null
+        if (auth && auth.startsWith('Bearer ')) {
+            const decodedToken = jwt.verify(
+                auth.substring(7), process.env.JWT_SECRET
+            )
+            const currentUser = await User
+                .findById(decodedToken.id).populate('friends')
+            return { currentUser }
+        }
+    },
 }));
 
 // Start the server
